@@ -1,0 +1,15 @@
+## Interface: 90002
+## Title: cxmplexpack
+## Author: cxmplex
+## Version: 1.0
+## SavedVariables: cxmplex_savedvars
+core\API.lua
+core\Hooks.lua
+core\ObjectTracker.lua
+core\Drawing.lua
+core\Events.lua
+modules\arena\ArenaDrawing.lua
+modules\travel\Travel.lua
+modules\questing\Quests.lua
+core\ChatHandler.lua
+init.lua
