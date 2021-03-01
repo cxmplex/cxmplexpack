@@ -3,6 +3,7 @@
 ## Author: cxmplex
 ## Version: 1.0
 ## SavedVariables: cxmplex_savedvars
+core\Variables.lua
 core\API.lua
 core\Hooks.lua
 core\ObjectTracker.lua

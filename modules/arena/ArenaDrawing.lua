@@ -2,8 +2,8 @@ function cxmplex:ArenaTeamAwareness()
   local isArena, isRegistered = IsActiveBattlefieldArena()
   if not isArena then return end
 
-	local player_name = UnitName("player")
-	local pX, pY, pZ = cxmplex:ObjectPosition("player")
+  local player_name = UnitName("player")
+  local pX, pY, pZ = cxmplex:ObjectPosition("player")
 
   for i = 1, GetNumGroupMembers(), 1 do
     local unit = "party" .. tostring(i)
@@ -29,28 +29,28 @@ function cxmplex:ArenaTeamAwareness()
       end
     end
   end
-	-- for i = 1, 3, 1 do
-	-- 	local unit = "arena" .. tostring(i)
-	-- 	if UnitExists(unit) then
-	-- 		-- get target of unit
-	-- 		local target = cxmplex:UnitTarget(unit)
-	-- 		local total_targets = 0
-	-- 		if select(1, UnitName(target)) == UnitName("player") then
-	-- 			total_targets = total_targets + 1
-	-- 		end
-	-- 		if total_targets > 0 then
-	-- 			if total_targets == 1 then
-	-- 				-- green
-	-- 				cxmplex.drawing:SetColor(113, 238, 184, 100)
-	-- 			elseif total_targets == 2 then
-	-- 				-- orange
-	-- 				cxmplex.drawing:SetColor(255, 127, 80, 100)
-	-- 			else
-	-- 				-- red
-	-- 				cxmplex.drawing:SetColor(255, 8, 0, 100)
-	-- 			end
-	-- 			cxmplex.drawing:GroundCircle(pX, pY, pZ, 2)
-	-- 		end
-	-- 	end
-	-- end
+  -- for i = 1, 3, 1 do
+  -- 	local unit = "arena" .. tostring(i)
+  -- 	if UnitExists(unit) then
+  -- 		-- get target of unit
+  -- 		local target = cxmplex:UnitTarget(unit)
+  -- 		local total_targets = 0
+  -- 		if select(1, UnitName(target)) == UnitName("player") then
+  -- 			total_targets = total_targets + 1
+  -- 		end
+  -- 		if total_targets > 0 then
+  -- 			if total_targets == 1 then
+  -- 				-- green
+  -- 				cxmplex.drawing:SetColor(113, 238, 184, 100)
+  -- 			elseif total_targets == 2 then
+  -- 				-- orange
+  -- 				cxmplex.drawing:SetColor(255, 127, 80, 100)
+  -- 			else
+  -- 				-- red
+  -- 				cxmplex.drawing:SetColor(255, 8, 0, 100)
+  -- 			end
+  -- 			cxmplex.drawing:GroundCircle(pX, pY, pZ, 2)
+  -- 		end
+  -- 	end
+  -- end
 end

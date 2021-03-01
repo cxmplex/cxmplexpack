@@ -1,8 +1,10 @@
 local sin, cos, atan, atan2, sqrt, rad = math.sin, math.cos, math.atan, math.atan2, math.sqrt, math.rad
 local onDrawTicker
-cxmplex.drawing = {}
 
 local WorldToScreen_Original = cxmplex.WorldToScreen
+
+-- we create this table here because we use it to store these functions
+cxmplex.drawing = {}
 function cxmplex.drawing:WorldToScreen(wX, wY, wZ)
   local isOnScreen, sX, sY = WorldToScreen_Original(wX, wY, wZ)
   local a = 1365;
@@ -264,7 +266,7 @@ function cxmplex.drawing:Text(text, x, y, z)
   end
   F:SetTextColor(private.line.r, private.line.g, private.line.b, private.line.a)
   tinsert(private.fontstrings_used, F)
-  F:SetFont("Interface\\Addons\\!cxmplexpack\\media\\fonts\\Ruluko.ttf", 11, "OUTLINE")
+  F:SetFont("Interface\\Addons\\" .. cxmplex.addon_name .. "\\media\\fonts\\Ruluko.ttf", 11, "OUTLINE")
   F:SetText(text)
   F:SetPoint("TOPLEFT", UIParent, "TOPLEFT", (sx) - (F:GetStringWidth() * 0.5), sy)
   F:Show()

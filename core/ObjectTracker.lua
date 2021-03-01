@@ -2,18 +2,6 @@ local last_time = 0
 local tracked_objects = {}
 local objManagerFrame, processObjectFrame = nil
 
-if not cxmplex_savedvars.objects_to_track then
-  cxmplex_savedvars.objects_to_track = {
-    default = {}
-  }
-end
-
-if not cxmplex_savedvars.enabled_lists then
-  cxmplex_savedvars.enabled_lists = {
-    default = true
-  }
-end
-
 local updated = false
 local processed_objects = {}
 

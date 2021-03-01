@@ -39,6 +39,6 @@ function cxmplex:EnableTorghastModule()
 end
 
 function cxmplex:DisableTorghastModule()
-  if not cxmplex:ObjectListExists("torghast") then end
+  if not cxmplex:ObjectListExists("torghast") then return end
   cxmplex:DisableObjectList("torghast")
 end
