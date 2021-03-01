@@ -27,6 +27,9 @@ function cxmplex:RunCommand(msg)
     SendSystemMessage("Object Tracker: " .. tostring(cxmplex.tracker_toggle));
     cxmplex:SetSystemVar("cxmplex.tracker_toggle", tostring(cxmplex.tracker_toggle))
     if cxmplex.tracker_toggle then
+      if not cxmplex:GetObjManagerFrame() then
+        cxmplex:InitObjectManager()
+      end
       cxmplex:AddDrawingCallback("objectTracker", cxmplex.DrawTrackedObjects)
     else
       cxmplex:RemoveDrawingCallback("objectTracker")
@@ -37,6 +40,12 @@ function cxmplex:RunCommand(msg)
       cxmplex:AddObjectToTrackerById(tonumber(id))
     elseif action == "del" then
       cxmplex:RemoveObjectFromTrackerById(tonumber(id))
+    end
+  elseif cmd == "farm" and args then
+    if args == "stop" then
+      cxmplex:DestroyAllFarmers()
+    else
+      cxmplex:CreateFarmer(args)
     end
   end
 end

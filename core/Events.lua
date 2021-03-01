@@ -38,6 +38,16 @@ function cxmplex:CoreOnEvent(event, ...)
         cxmplex:AddDrawingCallback("objectTracker", cxmplex.DrawTrackedObjects)
       end
     end
+  elseif event == "PLAYER_ENTERING_WORLD" then
+    C_Timer.After(3,
+      function()
+        if select(1, IsInInstance()) and select(4, GetInstanceInfo()) == "Torghast" then
+          cxmplex:EnableTorghastModule()
+        else
+          cxmplex:DisableTorghastModule()
+        end
+      end
+    )
   end
 end
 

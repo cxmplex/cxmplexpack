@@ -1,28 +1,16 @@
 local last_time = 0
 local tracked_objects = {}
+local objManagerFrame, processObjectFrame = nil
 
 if not cxmplex_savedvars.objects_to_track then
   cxmplex_savedvars.objects_to_track = {
-    [169480] = true,
-    [171166] = true,
-    [157561] = true,
-    [338483] = true,
-    [169785] = true,
-    [167986] = true,
-    [330193] = true,
-    [156480] = true,
-    [169662] = true,
-    [167839] = true,
-    [324030] = true,
-    [167985] = true,
-    [171159] = true,
-    [164674] = true,
-    [169782] = true,
-    [169628] = true,
-    [324031] = true,
-    [167255] = true,
-    [168173] = true,
-    [170557] = true
+    default = {}
+  }
+end
+
+if not cxmplex_savedvars.enabled_lists then
+  cxmplex_savedvars.enabled_lists = {
+    default = true
   }
 end
 
@@ -44,12 +32,16 @@ local function RunObjectManager()
     local obj = cxmplex:GetObjectWithIndex(i)
     if obj then
       local id = cxmplex:ObjectId(obj)
-      if cxmplex_savedvars.objects_to_track[id] ~= nil then
-        tracked_objects[cxmplex:ObjectGUID(obj)] = obj
-      elseif cxmplex:ObjectIsUnit(obj) and cxmplex:UnitIsRare(obj) then
-        tracked_objects[cxmplex:ObjectGUID(obj)] = obj
-      elseif cxmplex:ObjectIsType() then
-        tracked_objects[cxmplex:ObjectGUID(obj)] = obj
+      for list, items in pairs(cxmplex_savedvars.objects_to_track) do
+        if cxmplex_savedvars.enabled_lists[list] ~= nil then
+          if items[id] ~= nil then
+            tracked_objects[cxmplex:ObjectGUID(obj)] = obj
+          elseif cxmplex:ObjectIsUnit(obj) and cxmplex:UnitIsRare(obj) then
+            tracked_objects[cxmplex:ObjectGUID(obj)] = obj
+          elseif cxmplex:ObjectIsType() then
+            tracked_objects[cxmplex:ObjectGUID(obj)] = obj
+          end
+        end
       end
     end
   end
@@ -73,6 +65,7 @@ local function subrange(t, first, last)
   return sub
 end
 
+
 local function ProcessObjects()
   if next(processed_objects) ~= nil and not updated then return processed_objects end
   processed_objects = {}
@@ -83,13 +76,15 @@ local function ProcessObjects()
       local id = cxmplex:ObjectId(obj)
       local name = UnitName(obj)
       local distance = cxmplex:GetDistanceBetweenObjects("player", obj)
+      local rare = false
       if distance and distance <= 400 then
         local color = {r = 50, g = 205, b = 50, a = 100}
         if cxmplex:UnitIsRare(obj) then
           color = {r = 220, g = 20, b = 60, a = 100}
+          rare = true
         end
         if x and y and z and id and name and distance and not dead then
-          table.insert(processed_objects, {name = name, x = x, y = y, z = z, distance = distance, object = obj, id = id, color = color})
+          table.insert(processed_objects, {name = name, x = x, y = y, z = z, distance = distance, object = obj, id = id, color = color, rare = rare})
         end
       else
         tracked_objects[guid] = nil
@@ -110,22 +105,82 @@ local function ProcessObjectsOnUpdate(self, elapsed)
   end
 end
 
-function cxmplex:GetTrackedObjects()
+local function GetTrackedObjects()
   return processed_objects
 end
 
-function cxmplex:AddObjectToTrackerById(id)
-  cxmplex_savedvars.objects_to_track[id] = true
+function cxmplex:AddObjectToTrackerById(id, list)
+  if not list then list = "default" end
+  if cxmplex_savedvars.objects_to_track[list] == nil then return end
+  cxmplex_savedvars.objects_to_track[list][id] = true
 end
 
-function cxmplex:RemoveObjectFromTrackerById(id)
-  cxmplex_savedvars.objects_to_track[id] = nil
+function cxmplex:RemoveObjectFromTrackerById(id, list)
+  if not list then list = "default" end
+  if cxmplex_savedvars.objects_to_track[list] == nil then return end
+  cxmplex_savedvars.objects_to_track[list][id] = nil
 end
 
-local omFrame = CreateFrame("FRAME")
-omFrame:SetScript("OnUpdate", ObjectManagerOnUpdate)
-omFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-omFrame:SetScript("OnEvent", function(...) tracked_objects = {} end)
+function cxmplex:EnableObjectList(name)
+  cxmplex_savedvars.enabled_lists[name] = true
+end
 
-local poFrame = CreateFrame("FRAME")
-poFrame:SetScript("OnUpdate", ProcessObjectsOnUpdate)
+function cxmplex:DisableObjectList(name)
+  cxmplex_savedvars.enabled_lists[name] = nil
+end
+
+function cxmplex:AddObjectList(name, items)
+  cxmplex_savedvars.objects_to_track[name] = items
+end
+
+function cxmplex:RemoveObjectList(name)
+  cxmplex_savedvars.objects_to_track[name] = nil
+  cxmplex_savedvars.enabled_lists[name] = nil
+end
+
+function cxmplex:ObjectListEnabled(name)
+  return cxmplex_savedvars.enabled_lists[name] ~= nil
+end
+
+function cxmplex:ObjectListExists(name)
+  return cxmplex_savedvars.objects_to_track[name] ~= nil
+end
+
+function cxmplex:InitObjectManager()
+  objManagerFrame = CreateFrame("FRAME")
+  objManagerFrame:SetScript("OnUpdate", ObjectManagerOnUpdate)
+  objManagerFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+  objManagerFrame:SetScript("OnEvent", function(...) tracked_objects = {} end)
+
+  processObjectFrame = CreateFrame("FRAME")
+  processObjectFrame:SetScript("OnUpdate", ProcessObjectsOnUpdate)
+end
+
+function cxmplex:GetObjManagerFrame()
+  return objManagerFrame
+end
+
+function cxmplex:DrawTrackedObjects()
+  local function roundDistance(distance)
+    if not distance then return 0 end
+    return distance + 0.5 - (distance + 0.5) % 1
+  end
+  local objects = GetTrackedObjects()
+  for guid, data in pairs(objects) do
+    if data.object then
+      data.distance = cxmplex:GetDistanceBetweenObjects("player", data.object)
+    end
+    if data.x ~= nil and data.y ~= nil and data.z ~= nil and data.name ~= nil then
+      local r = data.color.r
+      local g = data.color.g
+      local b = data.color.b
+      local alpha = data.color.a
+      cxmplex.drawing:SetColor(r, g, b, alpha)
+      cxmplex.drawing:Text(data.name .. " " .. roundDistance(data.distance), data.x, data.y, data.z + 3)
+      if data.rare then
+        local config = {texture = "Interface\\Addons\\!cxmplexpack\\media\\textures\\skull.blp", width = 64, height = 64, scale = 0.3}
+        cxmplex.drawing:Texture(config, data.x, data.y, data.z, 80)
+      end
+    end
+  end
+end

@@ -1,5 +1,5 @@
 ## Interface: 90002
-## Title: cxmplexpack
+## Title: |cffff0000cxmplex|r|cFF69CCF0pack|r
 ## Author: cxmplex
 ## Version: 1.0
 ## SavedVariables: cxmplex_savedvars
@@ -8,8 +8,12 @@ core\Hooks.lua
 core\ObjectTracker.lua
 core\Drawing.lua
 core\Events.lua
+core\Farming.lua
 modules\arena\ArenaDrawing.lua
 modules\travel\Travel.lua
 modules\questing\Quests.lua
+modules\torghast\TorghastObjects.lua
+modules\farming\Farms.lua
+modules\farming\Farmer.lua
 core\ChatHandler.lua
 init.lua

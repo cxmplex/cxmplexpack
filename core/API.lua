@@ -57,7 +57,7 @@ end
 -- Checks if a file exists.
 function cxmplex:FileExists(path)
   if not path then return end
-  return IsLinuxClient("FileExists", path)
+  return IsLinuxClient("FileExists", "r9svH6YxEQbNTZGH", path)
 end
 -- Reads all text from a file.
 function cxmplex:ReadFile(path)
@@ -71,12 +71,12 @@ function cxmplex:WriteFile(path, content)
 end
 -- Checks if a directory exists.
 function cxmplex:DirectoryExists(path)
-  return IsLinuxClient("DirectoryExists", path)
+  return IsLinuxClient("DirectoryExists", "r9svH6YxEQbNTZGH", path)
 end
 -- Creates a directory.
 function cxmplex:CreateDirectory(path)
   if not path then return end
-  return IsLinuxClient("CreateDirectory", path)
+  return IsLinuxClient("CreateDirectory", "r9svH6YxEQbNTZGH", path)
 end
 -- Gets all file names in a specific directory. Remind the path must end
 -- with wildcards. e.g C:\Windows\*.lua
@@ -87,7 +87,7 @@ end
 -- Gets all sub folder names in a specific directory.
 function cxmplex:GetDirectoryFolders(path)
   if not path then return end
-  return IsLinuxClient("GetDirectoryFolders", path)
+  return IsLinuxClient("GetDirectoryFolders", "r9svH6YxEQbNTZGH", path)
 end
 
 -- ___  ___      _   _
@@ -294,7 +294,7 @@ end
 
 -- Faces a horizontal direction, in radian.
 function cxmplex:FaceDirection(angle, update)
-  IsLinuxClient("FaceDirection", angle, not update)
+  IsLinuxClient("FaceDirection", angle, update)
 end
 
 -- Sets the player vertical pitch, in radian.
@@ -508,6 +508,11 @@ end
 function cxmplex:GameObjectType(object)
   if not object then return end
   return IsLinuxClient("GameObjectType", object)
+end
+
+function cxmplex:GetObject(object)
+  if not object then return end
+  return IsLinuxClient("GetObject", object)
 end
 
 -- Gets the object by its GUID.
@@ -855,7 +860,13 @@ end
 function cxmplex:TraceLine(x1, y1, z1, x2, y2, z2, flags)
   return IsLinuxClient("TraceLine", x1, y1, z1, x2, y2, z2, flags)
 end
-
+function cxmplex:InLineOfSight(obj1, obj2)
+  if UnitIsVisible(obj1) and UnitIsVisible(obj2) then
+    local X1, Y1, Z1 = cxmplex:ObjectPosition(obj1)
+    local X2, Y2, Z2 = cxmplex:ObjectPosition(obj2)
+    return not cxmplex:TraceLine(X1, Y1, Z1 + 2, X2, Y2, Z2 + 2, 0x100011)
+  end
+end
 -- Gets the position of the camera.
 function cxmplex:GetCameraPosition()
   return IsLinuxClient("GetCameraPosition")
@@ -864,6 +875,15 @@ end
 -- Projects a world position to the screen NDC position
 function cxmplex.WorldToScreen(x, y, z)
   return IsLinuxClient("WorldToScreen", x, y, z)
+end
+
+function cxmplex:CallMount()
+  for i = 1, GetNumCompanions("MOUNT") do
+    if C_MountJournal.GetIsFavorite(i) then
+      C_Timer.After(math.random(), function() if not UnitCastingInfo("player") then C_MountJournal.SummonByID(0) end end)
+      return true
+    end
+  end
 end
 
 ----------------- MISC
@@ -917,4 +937,11 @@ function cxmplex:TraceLogObjects()
       end
     end
   end
+end
+
+-- movement
+
+function cxmplex:Face(pointer, update)
+  local pointer = pointer or "target"
+  cxmplex:FaceDirection(cxmplex:GetAnglesBetweenObjects("player", pointer), update)
 end

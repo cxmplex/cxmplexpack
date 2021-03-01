@@ -5,7 +5,6 @@ cxmplex.drawing = {}
 local WorldToScreen_Original = cxmplex.WorldToScreen
 function cxmplex.drawing:WorldToScreen(wX, wY, wZ)
   local isOnScreen, sX, sY = WorldToScreen_Original(wX, wY, wZ)
-  if not isOnScreen then return nil, nil end
   local a = 1365;
   local b = 768;
   local retX, retY
@@ -22,7 +21,7 @@ function cxmplex.drawing:WorldToScreen(wX, wY, wZ)
     retX = sX
     retY = sY
   end
-  return retX, retY
+  return retX, retY, isOnScreen
 end
 
 function cxmplex.drawing:SetColor(r, g, b, a)
@@ -49,8 +48,8 @@ end
 
 function cxmplex.drawing:Line(sx, sy, sz, ex, ey, ez)
   if not sx or not ex then return end
-  local sx, sy = cxmplex.drawing:WorldToScreen(sx, sy, sz)
-  local ex, ey = cxmplex.drawing:WorldToScreen(ex, ey, ez)
+  local sx, sy, isOnScreen = cxmplex.drawing:WorldToScreen(sx, sy, sz)
+  local ex, ey, isOnScreen2 = cxmplex.drawing:WorldToScreen(ex, ey, ez)
   if not sx or not sy or not ex or not ey then return end
   cxmplex.drawing:Draw2DLine(sx, sy, ex, ey)
 end
@@ -109,8 +108,8 @@ function cxmplex.drawing:Array(vectors, x, y, z, rotationX, rotationY, rotationZ
       ex, ey, ez = rotateZ(x, y, z, ex, ey, ez, rotationZ)
     end
 
-    local sx, sy = cxmplex.drawing:WorldToScreen(sx, sy, sz)
-    local ex, ey = cxmplex.drawing:WorldToScreen(ex, ey, ez)
+    local sx, sy, isOnScreen = cxmplex.drawing:WorldToScreen(sx, sy, sz)
+    local ex, ey, isOnScreen2 = cxmplex.drawing:WorldToScreen(ex, ey, ez)
     if not sx or not sy or not ex or not ey then return end
     cxmplex.drawing:Draw2DLine(sx, sy, ex, ey)
   end
@@ -125,9 +124,9 @@ function cxmplex.drawing:Draw2DLine(sx, sy, ex, ey)
     L = CreateFrame("Frame", private.canvas)
     L.line = L:CreateLine()
     L.line:SetDrawLayer("BACKGROUND")
-    L.line:SetThickness(private.line.w)
-    L.line:SetColorTexture(private.line.r, private.line.g, private.line.b, private.line.a)
   end
+  L.line:SetThickness(private.line.w)
+  L.line:SetColorTexture(private.line.r, private.line.g, private.line.b, private.line.a)
   tinsert(private.lines_used, L)
   L:ClearAllPoints()
   if (sx > ex and sy > ey) or (sx < ex and sy < ey) then
@@ -161,7 +160,8 @@ local small_circle_step = rad(3)
 function cxmplex.drawing:Circle(x, y, z, size)
   local lx, ly, nx, ny, fx, fy = false, false, false, false, false, false
   for v = 0, full_circle, small_circle_step do
-    nx, ny = cxmplex.drawing:WorldToScreen( (x + cos(v) * size), (y + sin(v) * size), z )
+    nx, ny, isOnScreen = cxmplex.drawing:WorldToScreen( (x + cos(v) * size), (y + sin(v) * size), z )
+    if not isOnScreen then return end
     if not nx or not ny then return end
     cxmplex.drawing:Draw2DLine(lx, ly, nx, ny)
     lx, ly = nx, ny
@@ -175,7 +175,8 @@ function cxmplex.drawing:GroundCircle(x, y, z, size)
     if fx == nil then
       fx, fy, fz = (x + cos(v) * size), (y + sin(v) * size), z
     end
-    nx, ny = cxmplex.drawing:WorldToScreen( (fx + cos(v) * size), (fy + sin(v) * size), fz )
+    nx, ny, isOnScreen = cxmplex.drawing:WorldToScreen( (fx + cos(v) * size), (fy + sin(v) * size), fz )
+    if not isOnScreen then return end
     if not nx or not ny then return end
     cxmplex.drawing:Draw2DLine(lx, ly, nx, ny)
     lx, ly = nx, ny
@@ -188,7 +189,8 @@ function cxmplex.drawing:Arc(x, y, z, size, arc, rotation)
   local ss = (arc / half_arc)
   local as, ae = -half_arc, half_arc
   for v = as, ae, ss do
-    nx, ny = cxmplex.drawing:WorldToScreen( (x + cos(rotation + rad(v)) * size), (y + sin(rotation + rad(v)) * size), z )
+    nx, ny, isOnScreen = cxmplex.drawing:WorldToScreen( (x + cos(rotation + rad(v)) * size), (y + sin(rotation + rad(v)) * size), z )
+    if not isOnScreen then return end
     if not nx or not ny then return end
     if lx and ly then
       cxmplex.drawing:Draw2DLine(lx, ly, nx, ny)
@@ -197,13 +199,17 @@ function cxmplex.drawing:Arc(x, y, z, size, arc, rotation)
     end
     lx, ly = nx, ny
   end
-  local px, py = cxmplex.drawing:WorldToScreen(x, y, z)
+  local px, py, isOnScreen = cxmplex.drawing:WorldToScreen(x, y, z)
+  if not isOnScreen then return end
   if not px or not py then return end
   cxmplex.drawing:Draw2DLine(px, py, lx, ly)
   cxmplex.drawing:Draw2DLine(px, py, fx, fy)
 end
 
 function cxmplex.drawing:Texture(config, x, y, z, alphaA)
+  local function Distance(ax, ay, az, bx, by, bz)
+    return math.sqrt(((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az)))
+  end
   local texture, width, height = config.texture, config.width, config.height
   local left, right, top, bottom, scale = config.left, config.right, config.top, config.bottom, config.scale
   local alpha = config.alpha or alphaA
@@ -220,7 +226,8 @@ function cxmplex.drawing:Texture(config, x, y, z, alphaA)
     scale = width / Distance(x, y, z, cx, cy, cz)
   end
 
-  local sx, sy = cxmplex.drawing:WorldToScreen(x, y, z)
+  local sx, sy, isOnScreen = cxmplex.drawing:WorldToScreen(x, y, z)
+  if not isOnScreen then return end
   if not sx or not sy then return end
   local w = width * scale
   local h = height * scale
@@ -234,7 +241,7 @@ function cxmplex.drawing:Texture(config, x, y, z, alphaA)
     T:SetDrawLayer(private.level)
     T:SetTexture(private.texture)
   end
-  tinsert(LibDraw.textures_used, T)
+  tinsert(private.textures_used, T)
   T:ClearAllPoints()
   T:SetTexCoord(left, right, top, bottom)
   T:SetTexture(texture)
@@ -248,22 +255,19 @@ function cxmplex.drawing:Texture(config, x, y, z, alphaA)
 end
 
 function cxmplex.drawing:Text(text, x, y, z)
-  local sx, sy = cxmplex.drawing:WorldToScreen(x, y, z)
+  local sx, sy, isOnScreen = cxmplex.drawing:WorldToScreen(x, y, z)
+  if not isOnScreen then return end
   if not sx or not sy then return end
   local F = tremove(private.fontstrings)
   if not F then
     F = private.canvas:CreateFontString(nil, "BACKGROUND")
-    F:SetFont("Interface\\Addons\\cxmplexpack\\media\\fonts\\Ruluko.ttf", 11, "OUTLINE")
-    F:SetTextColor(private.line.r, private.line.g, private.line.b, private.line.a)
   end
+  F:SetTextColor(private.line.r, private.line.g, private.line.b, private.line.a)
   tinsert(private.fontstrings_used, F)
+  F:SetFont("Interface\\Addons\\!cxmplexpack\\media\\fonts\\Ruluko.ttf", 11, "OUTLINE")
   F:SetText(text)
   F:SetPoint("TOPLEFT", UIParent, "TOPLEFT", (sx) - (F:GetStringWidth() * 0.5), sy)
   F:Show()
-end
-
-local function Distance(ax, ay, az, bx, by, bz)
-  return math.sqrt(((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az)))
 end
 
 function cxmplex.drawing:Camera()
@@ -323,6 +327,7 @@ function cxmplex:InitDrawing()
       fontstrings = {},
       fontstrings_used = {},
       textures = {},
+      level = "BACKGROUND",
     textures_used = {}}
     private.canvas:SetAllPoints(WorldFrame)
     onDrawTicker = Enable(1 / 90)
