@@ -14,6 +14,7 @@ function cxmplex:CoreOnUpdate(elapsed)
   end
 end
 
+local variables_loaded = false
 function cxmplex:CoreOnEvent(event, ...)
   if event == "VARIABLES_LOADED" then
     cxmplex:Init()
@@ -38,7 +39,8 @@ function cxmplex:CoreOnEvent(event, ...)
         cxmplex:AddDrawingCallback("objectTracker", cxmplex.DrawTrackedObjects)
       end
     end
-  elseif event == "PLAYER_ENTERING_WORLD" then
+		variables_loaded = true
+  elseif event == "PLAYER_ENTERING_WORLD" and variables_loaded then
     C_Timer.After(3,
       function()
         if select(1, IsInInstance()) and select(4, GetInstanceInfo()) == "Torghast" then

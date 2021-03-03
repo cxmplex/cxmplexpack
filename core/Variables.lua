@@ -1,7 +1,7 @@
-ADDON_NOM, TEST_VAR = ...
+addon_name, _ = ...
 if not cxmplex then
   cxmplex = {}
-  cxmplex.addon_name = "test"
+  cxmplex.addon_name = addon_name
   cxmplex.multijump_toggle = false
   cxmplex.anti_afk = false
   cxmplex.tracker_toggle = false

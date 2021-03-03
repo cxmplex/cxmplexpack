@@ -1,16 +1,23 @@
-cxmplex = {}
-cxmplex_savedvars = {}
-cxmplex.multijump_toggle = false
-cxmplex.anti_afk = false
-cxmplex.tracker_toggle = false
-cxmplex.arena_los_toggle = true
-
-local classification_types = {
-  rareelite = true,
-  rare = true
-}
+local cache = { pop_time = 0.020 }
+cache.GetObjectCount = { last_ran = 0 }
+cache.GetObjectWithIndex = {}
+cache.GetNpcCount = { last_ran = 0 }
+cache.GetNpcWithIndex = {}
+cache.GetPlayerCount = { last_ran = 0 }
+cache.GetPlayerWithIndex = {}
+cache.GetGameObjectCount = { last_ran = 0 }
+cache.GetGameObjectWithIndex = {}
+cache.GetDynamicObjectCount = { last_ran = 0 }
+cache.GetDynamicObjectWithIndex = {}
+cache.GetAreaTriggerCount = { last_ran = 0 }
+cache.GetAreaTriggerWithIndex = {}
+cache.GetMissileCount = { last_ran = 0 }
+cache.GetMissileWithIndex = {}
 
 function printf(...) print(string.format(...)) end
+function pack(...)
+    return {n = select("#", ...), ...}
+end
 --   _____
 --  /  __ \
 --  | /  \/ ___  _ __ ___  _ __ ___   ___  _ __
@@ -353,7 +360,6 @@ end
 
 -- Sets the engine allowed climb angle, in radian. If nil, restore original setting.
 function cxmplex:SetClimbAngle(angle)
-  if not angle then return end
   return IsLinuxClient("SetClimbAngle", angle)
 end
 
@@ -392,14 +398,25 @@ end
 
 -- Gets the count of the flying missiles.
 function cxmplex:GetMissileCount()
-  return IsLinuxClient("GetMissileCount")
+	if GetTime() - cache.GetMissileCount.last_ran > cache.pop_time then
+		cache.GetMissileCount.results = pack(IsLinuxClient("GetMissileCount"))
+		cache.GetMissileCount.last_ran = GetTime()
+	end
+	return unpack(cache.GetMissileCount.results)
 end
 
 -- Gets the info of a specific missile.
 -- spellId, spellVisualId, x, y, z, sourceObject, sourceX, sourceY, sourceZ,
 -- targetObject, targetX, targetY, targetZ
 function cxmplex:GetMissileWithIndex(index)
-  return IsLinuxClient("GetMissileWithIndex", index)
+	if not cache.GetMissileWithIndex[index] then
+		cache.GetMissileWithIndex[index] = { last_ran = 0 }
+	end
+	if GetTime() - cache.GetMissileWithIndex[index].last_ran > cache.pop_time then
+		cache.GetMissileWithIndex[index].results = pack(IsLinuxClient("GetMissileWithIndex", index))
+		cache.GetMissileWithIndex[index].last_ran = GetTime()
+	end
+	return unpack(cache.GetMissileWithIndex[index].results)
 end
 
 -- in-world navigation
@@ -717,8 +734,12 @@ function cxmplex:UnitMountID(unit)
 end
 
 function cxmplex:UnitIsRare(unit)
-  local classification = UnitClassification(unit)
-  return classification_types[classification] ~= nil
+	if not unit then return end
+	local classification_types = {
+	  rareelite = true,
+	  rare = true
+	}
+  return classification_types[UnitClassification(unit)]
 end
 
 
@@ -733,82 +754,187 @@ end
 
 -- Gets the count of all world objects, also updates all objects.
 function cxmplex:GetObjectCount()
-  return IsLinuxClient("GetObjectCount")
+	if GetTime() - cache.GetObjectCount.last_ran > cache.pop_time then
+		cache.GetObjectCount.results = pack(IsLinuxClient("GetObjectCount"))
+		cache.GetObjectCount.last_ran = GetTime()
+	end
+	return unpack(cache.GetObjectCount.results)
 end
 
 -- Gets a specific world object by its index.
 function cxmplex:GetObjectWithIndex(index)
-  return IsLinuxClient("GetObjectWithIndex", index)
+	if not index then return end
+	if not cache.GetObjectWithIndex[index] then
+		cache.GetObjectWithIndex[index] = { last_ran = 0 }
+	end
+	if GetTime() - cache.GetObjectWithIndex[index].last_ran > cache.pop_time then
+		cache.GetObjectWithIndex[index].results = pack(IsLinuxClient("GetObjectWithIndex", index))
+		cache.GetObjectWithIndex[index].last_ran = GetTime()
+	end
+	return unpack(cache.GetObjectWithIndex[index].results)
 end
 
 -- Gets the count of all npcs, also updates npcs.
 function cxmplex:GetNpcCount(pointer, range)
   if not pointer then return end
-  if range then
-    return IsLinuxClient("GetNpcCount", pointer, range)
-  else
-    return IsLinuxClient("GetNpcCount", pointer)
+	if not cache.GetNpcCount[pointer] then
+		cache.GetNpcCount[pointer] = { last_ran = 0 }
+	end
+	if range and not cache.GetNpcCount[pointer][range] then
+		cache.GetNpcCount[pointer][range] = { last_ran = 0 }
+	end
+  if range and GetTime() - cache.GetNpcCount[pointer][range].last_ran > cache.pop_time then
+    cache.GetNpcCount[pointer][range].results = pack(IsLinuxClient("GetNpcCount", pointer, range))
+		cache.GetNpcCount[pointer][range].last_ran = GetTime()
+  elseif not range and GetTime() - cache.GetNpcCount[pointer].last_ran > cache.pop_time then
+    cache.GetNpcCount[pointer].results = pack(IsLinuxClient("GetNpcCount", pointer))
+		cache.GetNpcCount[pointer].last_ran = GetTime()
   end
+	if range then
+		return unpack(cache.GetNpcCount[pointer][range].results)
+	end
+	return unpack(cache.GetNpcCount[pointer].results)
 end
 
 -- Gets a specific npc by its index.
 function cxmplex:GetNpcWithIndex(index)
-  return IsLinuxClient("GetNpcWithIndex", index)
+	if not index then return end
+	if not cache.GetNpcWithIndex[index] then
+		cache.GetNpcWithIndex[index] = { last_ran = 0 }
+	end
+	if GetTime() - cache.GetNpcWithIndex[index].last_ran > cache.pop_time then
+		cache.GetNpcWithIndex[index].results = pack(IsLinuxClient("GetNpcWithIndex", index))
+		cache.GetNpcWithIndex[index].last_ran = GetTime()
+	end
+	return unpack(cache.GetNpcWithIndex[index].results)
 end
 
 -- Gets the count of specific players.
 function cxmplex:GetPlayerCount(pointer, range)
-  if not pointer then return end
-  if range then
-    return IsLinuxClient("GetPlayerCount", pointer, range)
-  else
-    return IsLinuxClient("GetPlayerCount", pointer)
+	if not pointer then return end
+	if not cache.GetPlayerCount[pointer] then
+		cache.GetPlayerCount[pointer] = { last_ran = 0 }
+	end
+	if range and not cache.GetPlayerCount[pointer][range] then
+		cache.GetPlayerCount[pointer][range] = { last_ran = 0 }
+	end
+  if range and GetTime() - cache.GetPlayerCount[pointer][range].last_ran > cache.pop_time then
+    cache.GetPlayerCount[pointer][range].results = pack(IsLinuxClient("GetPlayerCount", pointer, range))
+		cache.GetPlayerCount[pointer][range].last_ran = GetTime()
+  elseif not range and GetTime() - cache.GetPlayerCount[pointer].last_ran > cache.pop_time then
+    cache.GetPlayerCount[pointer].results = pack(IsLinuxClient("GetPlayerCount", pointer))
+		cache.GetPlayerCount[pointer].last_ran = GetTime()
   end
+	if range then
+		return unpack(cache.GetPlayerCount[pointer][range].results)
+	end
+	return unpack(cache.GetPlayerCount[pointer].results)
 end
 
 -- Gets the specific player by index.
 function cxmplex:GetPlayerWithIndex(index)
-  return IsLinuxClient("GetPlayerWithIndex", index)
+	if not index then return end
+	if not cache.GetPlayerWithIndex[index] then
+		cache.GetPlayerWithIndex[index] = { last_ran = 0 }
+	end
+	if GetTime() - cache.GetPlayerWithIndex[index].last_ran > cache.pop_time then
+		cache.GetPlayerWithIndex[index].results = pack(IsLinuxClient("GetPlayerWithIndex", index))
+		cache.GetPlayerWithIndex[index].last_ran = GetTime()
+	end
+	return unpack(cache.GetPlayerWithIndex[index].results)
 end
 
 -- Gets the count of specific game objects, also updates game objects.
 function cxmplex:GetGameObjectCount(pointer, range)
-  if not pointer then return end
-  return IsLinuxClient("GetGameObjectCount", pointer, range)
+	if not cache.GetGameObjectCount[range] or GetTime() - cache.GetGameObjectCount[range].last_ran > cache.pop_time then
+		cache.GetGameObjectCount[range] = {}
+		cache.GetGameObjectCount[range].results = pack(IsLinuxClient("GetGameObjectCount"))
+		cache.GetGameObjectCount[range].last_ran = GetTime()
+	end
+	return unpack(cache.GetGameObjectCount[range].results)
 end
 
 -- Gets the specific game object by index.
 function cxmplex:GetGameObjectWithIndex(index)
-  return IsLinuxClient("GetGameObjectWithIndex", index)
+	if not index then return end
+	if not cache.GetGameObjectWithIndex[index] then
+		cache.GetGameObjectWithIndex[index] = { last_ran = 0 }
+	end
+	if GetTime() - cache.GetGameObjectWithIndex[index].last_ran > cache.pop_time then
+		cache.GetGameObjectWithIndex[index].results = pack(IsLinuxClient("GetGameObjectWithIndex", index))
+		cache.GetGameObjectWithIndex[index].last_ran = GetTime()
+	end
+	return unpack(cache.GetGameObjectWithIndex[index].results)
 end
 
 -- Gets the count of specific dynamic objects, also updates dynamic objects.
 function cxmplex:GetDynamicObjectCount(pointer, range)
-  if not pointer then return end
-  if range then
-    return IsLinuxClient("GetDynamicObjectCount", pointer, range)
-  else
-    return IsLinuxClient("GetDynamicObjectCount", pointer)
+	if not pointer then return end
+	if not cache.GetDynamicObjectCount[pointer] then
+		cache.GetDynamicObjectCount[pointer] = { last_ran = 0 }
+	end
+	if range and not cache.GetDynamicObjectCount[pointer][range] then
+		cache.GetDynamicObjectCount[pointer][range] = { last_ran = 0 }
+	end
+  if range and GetTime() - cache.GetDynamicObjectCount[pointer][range].last_ran > cache.pop_time then
+    cache.GetDynamicObjectCount[pointer][range].results = pack(IsLinuxClient("GetDynamicObjectCount", pointer, range))
+		cache.GetDynamicObjectCount[pointer][range].last_ran = GetTime()
+  elseif not range and GetTime() - cache.GetDynamicObjectCount[pointer].last_ran > cache.pop_time then
+    cache.GetDynamicObjectCount[pointer].results = pack(IsLinuxClient("GetDynamicObjectCount", pointer))
+		cache.GetDynamicObjectCount[pointer].last_ran = GetTime()
   end
+	if range then
+		return unpack(cache.GetDynamicObjectCount[pointer][range].results)
+	end
+	return unpack(cache.GetDynamicObjectCount[pointer].results)
 end
 
 -- Gets a specific dynamic object by index.
 function cxmplex:GetDynamicObjectWithIndex(index)
-  return IsLinuxClient("GetDynamicObjectWithIndex", index)
+	if not index then return end
+	if not cache.GetDynamicObjectWithIndex[index] then
+		cache.GetDynamicObjectWithIndex[index] = { last_ran = 0 }
+	end
+	if GetTime() - cache.GetDynamicObjectWithIndex[index].last_ran > cache.pop_time then
+		cache.GetDynamicObjectWithIndex[index].results = pack(IsLinuxClient("GetDynamicObjectWithIndex", index))
+		cache.GetDynamicObjectWithIndex[index].last_ran = GetTime()
+	end
+	return unpack(cache.GetDynamicObjectWithIndex[index].results)
 end
 
 -- Gets the count of specific area triggers
 function cxmplex:GetAreaTriggerCount(pointer, range)
-  if not pointer then return end
-  if range then
-    IsLinuxClient("GetAreaTriggerCount", pointer, range)
+	if not pointer then return end
+	if not cache.GetAreaTriggerCount[pointer] then
+		cache.GetAreaTriggerCount[pointer] = { last_ran = 0 }
+	end
+	if range and not cache.GetAreaTriggerCount[pointer][range] then
+		cache.GetAreaTriggerCount[pointer][range] = { last_ran = 0 }
+	end
+  if range and GetTime() - cache.GetAreaTriggerCount[pointer][range].last_ran > cache.pop_time then
+    cache.GetAreaTriggerCount[pointer][range].results = pack(IsLinuxClient("GetAreaTriggerCount", pointer, range))
+		cache.GetAreaTriggerCount[pointer][range].last_ran = GetTime()
+  elseif not range and GetTime() - cache.GetAreaTriggerCount[pointer].last_ran > cache.pop_time then
+    cache.GetAreaTriggerCount[pointer].results = pack(IsLinuxClient("GetAreaTriggerCount", pointer))
+		cache.GetAreaTriggerCount[pointer].last_ran = GetTime()
   end
-  return IsLinuxClient("GetAreaTriggerCount", pointer)
+	if range then
+		return unpack(cache.GetAreaTriggerCount[pointer][range].results)
+	end
+	return unpack(cache.GetAreaTriggerCount[pointer].results)
 end
 
 -- Gets a specific AreaTrigger by index
 function cxmplex:GetAreaTriggerWithIndex(index)
-  return IsLinuxClient("GetAreaTriggerWithIndex", index)
+	if not index then return end
+	if not cache.GetAreaTriggerWithIndex[index] then
+		cache.GetAreaTriggerWithIndex[index] = { last_ran = 0 }
+	end
+	if GetTime() - cache.GetAreaTriggerWithIndex[index].last_ran > cache.pop_time then
+		cache.GetAreaTriggerWithIndex[index].results = pack(IsLinuxClient("GetAreaTriggerWithIndex", index))
+		cache.GetAreaTriggerWithIndex[index].last_ran = GetTime()
+	end
+	return unpack(cache.GetAreaTriggerWithIndex[index].results)
 end
 
 --  _____            _ _
@@ -944,4 +1070,10 @@ end
 function cxmplex:Face(pointer, update)
   local pointer = pointer or "target"
   cxmplex:FaceDirection(cxmplex:GetAnglesBetweenObjects("player", pointer), update)
+end
+
+
+-- security
+function cxmplex:SpoofKeyPress()
+
 end

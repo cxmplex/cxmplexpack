@@ -1,5 +1,5 @@
 local frame = CreateFrame("FRAME")
-local private
+local private = {}
 
 -------------------------------------------------------------------------------------------
 

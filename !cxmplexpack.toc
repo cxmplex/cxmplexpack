@@ -10,10 +10,11 @@ core\ObjectTracker.lua
 core\Drawing.lua
 core\Events.lua
 core\Farming.lua
-modules\arena\ArenaDrawing.lua
+modules\arena\Awareness.lua
 modules\travel\Travel.lua
 modules\questing\Quests.lua
 modules\torghast\TorghastObjects.lua
+modules\loot\Looter.lua
 modules\farming\Farms.lua
 modules\farming\Farmer.lua
 core\ChatHandler.lua
