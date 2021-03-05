@@ -13,6 +13,13 @@ cache.GetAreaTriggerCount = { last_ran = 0 }
 cache.GetAreaTriggerWithIndex = {}
 cache.GetMissileCount = { last_ran = 0 }
 cache.GetMissileWithIndex = {}
+cache.IsQuestObject = {}
+cxmplex.oMoveForwardStart = MoveForwardStart
+cxmplex.oMoveBackwardStart = MoveBackwardStart
+cxmplex.oStrafeLeftStart = StrafeLeftStart
+cxmplex.oStrafeRightStart = StrafeRightStart
+cxmplex.oJumpOrAscendStart = JumpOrAscendStart
+cxmplex.oCameraOrSelectOrMoveStart = CameraOrSelectOrMoveStart
 
 function printf(...) print(string.format(...)) end
 function pack(...)
@@ -27,32 +34,32 @@ end
 
 -- Gets the base directory path of app storage.
 function cxmplex:GetAppStorageDirectory()
-  return IsLinuxClient("GetAppStorageDirectory")
+    return IsLinuxClient("GetAppStorageDirectory")
 end
 
 -- Gets the app base directory path.
 function cxmplex:GetAppDirectory()
-  return IsLinuxClient("GetAppDirectory")
+    return IsLinuxClient("GetAppDirectory")
 end
 
 -- Gets the app username.
 function cxmplex:GetAppUsername()
-  return IsLinuxClient("GetAppUsername")
+    return IsLinuxClient("GetAppUsername")
 end
 
 -- Gets the WoW base directory path.
 function cxmplex:GetWoWDirectory()
-  return IsLinuxClient("GetWoWDirectory")
+    return IsLinuxClient("GetWoWDirectory")
 end
 
 -- Gets the value of the system variable previously set by SetSystemVar.
 function cxmplex:GetSystemVar(name)
-  return IsLinuxClient("GetSystemVar", name)
+    return IsLinuxClient("GetSystemVar", name)
 end
 
 -- Sets a system variable.
 function cxmplex:SetSystemVar(name, value)
-  return IsLinuxClient("SetSystemVar", name, value)
+    return IsLinuxClient("SetSystemVar", name, value)
 end
 
 -- |  ___(_) |
@@ -63,38 +70,38 @@ end
 
 -- Checks if a file exists.
 function cxmplex:FileExists(path)
-  if not path then return end
-  return IsLinuxClient("FileExists", "r9svH6YxEQbNTZGH", path)
+    if not path then return end
+    return IsLinuxClient("FileExists", "r9svH6YxEQbNTZGH", path)
 end
 -- Reads all text from a file.
 function cxmplex:ReadFile(path)
-  if not path then return end
-  return IsLinuxClient("ReadFile", path)
+    if not path then return end
+    return IsLinuxClient("ReadFile", path)
 end
 -- Writes all text to a file.
 function cxmplex:WriteFile(path, content)
-  if not path then return end
-  IsLinuxClient("WriteFile", path, content)
+    if not path then return end
+    IsLinuxClient("WriteFile", path, content)
 end
 -- Checks if a directory exists.
 function cxmplex:DirectoryExists(path)
-  return IsLinuxClient("DirectoryExists", "r9svH6YxEQbNTZGH", path)
+    return IsLinuxClient("DirectoryExists", "r9svH6YxEQbNTZGH", path)
 end
 -- Creates a directory.
 function cxmplex:CreateDirectory(path)
-  if not path then return end
-  return IsLinuxClient("CreateDirectory", "r9svH6YxEQbNTZGH", path)
+    if not path then return end
+    return IsLinuxClient("CreateDirectory", "r9svH6YxEQbNTZGH", path)
 end
 -- Gets all file names in a specific directory. Remind the path must end
 -- with wildcards. e.g C:\Windows\*.lua
 function cxmplex:GetDirectoryFiles(path)
-  if not path then return end
-  return IsLinuxClient("GetDirectoryFiles", "r9svH6YxEQbNTZGH", path)
+    if not path then return end
+    return IsLinuxClient("GetDirectoryFiles", "r9svH6YxEQbNTZGH", path)
 end
 -- Gets all sub folder names in a specific directory.
 function cxmplex:GetDirectoryFolders(path)
-  if not path then return end
-  return IsLinuxClient("GetDirectoryFolders", "r9svH6YxEQbNTZGH", path)
+    if not path then return end
+    return IsLinuxClient("GetDirectoryFolders", "r9svH6YxEQbNTZGH", path)
 end
 
 -- ___  ___      _   _
@@ -106,40 +113,40 @@ end
 
 -- Gets all spanning circles of a specific radius over certain weighted points.
 function cxmplex:GetAllSpanningCircles(radius, minWeight, points)
-  return IsLinuxClient("GetAllSpanningCircles", radius, minWeight, points)
+    return IsLinuxClient("GetAllSpanningCircles", radius, minWeight, points)
 end
 
 -- Gets the distance between two positions in 3D.
 function cxmplex:GetDistanceBetweenPositions(x1, y1, z1, x2, y2, z2)
-  return IsLinuxClient("GetDistanceBetweenPositions", x1, y1, z1, x2, y2, z2)
+    return IsLinuxClient("GetDistanceBetweenPositions", x1, y1, z1, x2, y2, z2)
 end
 
 -- Gets the distance between two objects in 3D.
 function cxmplex:GetDistanceBetweenObjects(object1, object2)
-  if not object1 or not object2 then return 0 end
-  return IsLinuxClient("GetDistanceBetweenObjects", object1, object2)
+    if not object1 or not object2 then return 0 end
+    return IsLinuxClient("GetDistanceBetweenObjects", object1, object2)
 end
 
 -- Gets the position from object 1 to object 2.
 function cxmplex:GetPositionBetweenObjects(object1, object2, dist)
-  if not object1 or not object2 then return 0 end
-  return IsLinuxClient("GetPositionBetweenObjects", object1, object2, dist)
+    if not object1 or not object2 then return 0 end
+    return IsLinuxClient("GetPositionBetweenObjects", object1, object2, dist)
 end
 
 -- Gets the position from position 1 to position 2.
 function cxmplex:GetPositionBetweenPositions(x1, y1, z1, x2, y2, z2, distance)
-  return IsLinuxClient("GetPositionBetweenPositions", x1, y1, z1, x2, y2, z2, distance)
+    return IsLinuxClient("GetPositionBetweenPositions", x1, y1, z1, x2, y2, z2, distance)
 end
 
 -- Gets the position relative to a specific position.
 function cxmplex:GetPositionFromPosition(x1, y1, z1, distance, facing, pitch)
-  return IsLinuxClient("GetPositionFromPosition", x1, y1, z1, distance, facing, pitch)
+    return IsLinuxClient("GetPositionFromPosition", x1, y1, z1, distance, facing, pitch)
 end
 
 -- Gets the angles (facing & pitch) between two objects.
 function cxmplex:GetAnglesBetweenObjects(object1, object2)
-  if not object1 or not object2 then return 0 end
-  return IsLinuxClient("GetAnglesBetweenObjects", object1, object2)
+    if not object1 or not object2 then return 0 end
+    return IsLinuxClient("GetAnglesBetweenObjects", object1, object2)
 end
 
 -- ___  ___
@@ -157,7 +164,7 @@ end
 -- type (number): The type of the value. Check GetValueTypesTable().
 -- value (number): The result value. nil if the memory address is not found.
 function cxmplex:ReadMemory(module, offset, type)
-  return IsLinuxClient("ReadMemory", module, offset, type)
+    return IsLinuxClient("ReadMemory", module, offset, type)
 end
 
 -- Gets the offset of a memory address in a specific module.
@@ -165,7 +172,7 @@ end
 -- address (number): The absolute memory address.
 -- offset (number): The result offset. nil if the memory address is not found.
 function cxmplex:GetMemoryOffset(module, address)
-  return IsLinuxClient("GetMemoryOffset", module, address)
+    return IsLinuxClient("GetMemoryOffset", module, address)
 end
 
 -- ___  ____
@@ -177,28 +184,28 @@ end
 
 -- Gets the pressed state of a specific key.
 function cxmplex:GetKeyState(key)
-  return IsLinuxClient("GetKeyState", key)
+    return IsLinuxClient("GetKeyState", key)
 end
 
 -- Plays a specific sound WAV/MP3 file once.
 function cxmplex:PlaySoundFile(path)
-  return IsLinuxClient("PlaySoundFile", path)
+    return IsLinuxClient("PlaySoundFile", path)
 end
 
 -- Loads a Lua script with a name by engine into a function.
 function cxmplex:LoadScript(name, script)
-  return IsLinuxClient("LoadScript", name, script)
+    return IsLinuxClient("LoadScript", name, script)
 end
 
 -- Runs a Lua script with a name by engine.
 function cxmplex:RunScript(name, script)
-  return IsLinuxClient("RunScript", name, script)
+    return IsLinuxClient("RunScript", name, script)
 end
 
 -- Adds a custom script (indexed by name) that gets loaded side by side
 -- with the engine modules (Primary and Secondary). Loaded in GLUE
 function cxmplex:SetCustomScript(name, script)
-  return IsLinuxClient("SetCustomScript", name, script)
+    return IsLinuxClient("SetCustomScript", name, script)
 end
 
 
@@ -227,7 +234,7 @@ end
 -- -- The HTTP request ID if sent successfully, for querying HTTP response later.
 -- request = "abc123"
 function cxmplex:SendHttpRequest(info)
-  return IsLinuxClient("SendHttpRequest", info)
+    return IsLinuxClient("SendHttpRequest", info)
 end
 
 -- -- The HTTP request ID previously sent.
@@ -253,7 +260,7 @@ end
 --   Certificate = "SERVER CERTIFICATE",
 -- }
 function cxmplex:ReceiveHttpRequest(request)
-  return IsLinuxClient("ReceiveHttpRequest", request)
+    return IsLinuxClient("ReceiveHttpRequest", request)
 end
 
 -- -- The websocket info.
@@ -274,17 +281,17 @@ end
 -- -- The websocket connection ID if sent successfully.
 -- connection = "abc123"
 function cxmplex:ConnectWebsocket(info)
-  return IsLinuxClient("ConnectWebsocket", info)
+    return IsLinuxClient("ConnectWebsocket", info)
 end
 
 -- Closes an existing websocket connection.
 function cxmplex:CloseWebSocket(info)
-  return IsLinuxClient("CloseWebSocket", info)
+    return IsLinuxClient("CloseWebSocket", info)
 end
 
 -- Sends a piece of string data over an existing websocket connection.
 function cxmplex:SendWebsocketData(connection, data)
-  return IsLinuxClient("SendWebsocketData", connection, data)
+    return IsLinuxClient("SendWebsocketData", connection, data)
 end
 
 --   ___       _   _
@@ -296,30 +303,30 @@ end
 
 -- Clicks a world position.
 function cxmplex:ClickPosition(x, y, z)
-  IsLinuxClient("ClickPosition", x, y, z)
+    IsLinuxClient("ClickPosition", x, y, z)
 end
 
 -- Faces a horizontal direction, in radian.
 function cxmplex:FaceDirection(angle, update)
-  IsLinuxClient("FaceDirection", angle, update)
+    IsLinuxClient("FaceDirection", angle, update)
 end
 
 -- Sets the player vertical pitch, in radian.
 function cxmplex:SetPitch(angle)
-  if not angle then return end
-  return IsLinuxClient("SetPitch", angle)
+    if not angle then return end
+    return IsLinuxClient("SetPitch", angle)
 end
 
 -- Moves the player to a specific position, using CTM.
 function cxmplex:MoveTo(x, y, z, instantTurn)
-  instantTurn = instantTurn or true
-  IsLinuxClient("MoveTo", x, y, z, instantTurn)
+    instantTurn = instantTurn or true
+    IsLinuxClient("MoveTo", x, y, z, instantTurn)
 end
 
 -- Interacts with an object.0
 function cxmplex:ObjectInteract(object)
-  if not object then return end
-  InteractUnit(object)
+    if not object then return end
+    InteractUnit(object)
 end
 
 --   ___
@@ -331,19 +338,19 @@ end
 
 -- Gets the count of auras on a specific unit, optionally filtered by spell ID.
 function cxmplex:GetAuraCount(unit, spellId)
-  if not unit then return end
-  if spellId then
-    return IsLinuxClient("GetAuraCount", spellId)
-  end
-  return IsLinuxClient("GetAuraCount", unit)
+    if not unit then return end
+    if spellId then
+        return IsLinuxClient("GetAuraCount", spellId)
+    end
+    return IsLinuxClient("GetAuraCount", unit)
 end
 
 -- Gets the info of a specific aura, saved by the most recent call to GetAuraCount().
 function cxmplex:GetAuraWithIndex(index, detailed)
-  if detailed then
-    return IsLinuxClient("GetAuraWithIndex", index, detailed)
-  end
-  return IsLinuxClient("GetAuraWithIndex", index)
+    if detailed then
+        return IsLinuxClient("GetAuraWithIndex", index, detailed)
+    end
+    return IsLinuxClient("GetAuraWithIndex", index)
 end
 
 -- ______ _            _         _____         _
@@ -355,38 +362,79 @@ end
 
 -- Sets the current camera distance maximum. If nil, restore original setting.
 function cxmplex:SetCameraDistanceMax(distance)
-  return IsLinuxClient("SetCameraDistanceMax", distance)
+    return IsLinuxClient("SetCameraDistanceMax", distance)
 end
 
 -- Sets the engine allowed climb angle, in radian. If nil, restore original setting.
 function cxmplex:SetClimbAngle(angle)
-  return IsLinuxClient("SetClimbAngle", angle)
+    return IsLinuxClient("SetClimbAngle", angle)
 end
 
 -- Sets a CVar without system limitation.
 function cxmplex:SetCVarEx(name, value)
-  return IsLinuxClient("SetCVarEx", name, value)
+    return IsLinuxClient("SetCVarEx", name, value)
 end
 
 -- Sets the current nameplate visible distance maximum. If nil, restore original setting.
 function cxmplex:SetNameplateDistanceMax(distance)
-  return IsLinuxClient("SetNameplateDistanceMax", distance)
+    return IsLinuxClient("SetNameplateDistanceMax", distance)
 end
 
 -- Stops the current falling of the character right now.
 function cxmplex:StopFalling()
-  return IsLinuxClient('StopFalling')
+    return IsLinuxClient('StopFalling')
 end
 
 -- Gets the current no-clip mode flags, which is a sum of:
 -- 0: none 1: building 2: static object 4: dynamic object
 function cxmplex:GetNoClipModes()
-  return IsLinuxClient("GetNoClipModes")
+    return IsLinuxClient("GetNoClipModes")
 end
 
 -- Sets the current no-clip mode flags. Check the enum above.
 function cxmplex:SetNoClipModes(modes)
-  return IsLinuxClient("SetNoClipModes", modes)
+    return IsLinuxClient("SetNoClipModes", modes)
+end
+
+function cxmplex:UnlockMovement()
+    if cxmplex.movement_locked then
+        MoveForwardStart = cxmplex.oMoveForwardStart
+        MoveBackwardStart = cxmplex.oMoveBackwardStart
+        StrafeLeftStart = cxmplex.oStrafeLeftStart
+        StrafeRightStart = cxmplex.oStrafeRightStart
+        CameraOrSelectOrMoveStart = cxmplex.oCameraOrSelectOrMoveStop
+        JumpOrAscendStart = cxmplex.oJumpOrAscendStart
+        cxmplex.movement_locked = false
+    end
+end
+
+function cxmplex:LockMovement()
+    MoveForwardStart = function() end
+    MoveBackwardStart = function() end
+    StrafeLeftStart = function() end
+    StrafeRightStart = function() end
+    JumpOrAscendStart = function() end
+    CameraOrSelectOrMoveStart = function() end
+    cxmplex.movement_locked = true
+end
+
+
+function cxmplex:StopMoving(lock)
+    MoveForwardStop()
+    MoveBackwardStop()
+    StrafeLeftStop()
+    StrafeRightStop()
+    TurnLeftStop()
+    TurnRightStop()
+    AscendStop()
+    CameraOrSelectOrMoveStop()
+    local x, y, z = GetPlayerPosition()
+    MoveTo(x, y, z)
+    if lock then
+        cxmplex:LockMovement()
+    else
+        cxmplex:UnlockMovement()
+    end
 end
 
 -- ___  ____         _ _
@@ -398,56 +446,56 @@ end
 
 -- Gets the count of the flying missiles.
 function cxmplex:GetMissileCount()
-	if GetTime() - cache.GetMissileCount.last_ran > cache.pop_time then
-		cache.GetMissileCount.results = pack(IsLinuxClient("GetMissileCount"))
-		cache.GetMissileCount.last_ran = GetTime()
-	end
-	return unpack(cache.GetMissileCount.results)
+    if GetTime() - cache.GetMissileCount.last_ran > cache.pop_time then
+        cache.GetMissileCount.results = pack(IsLinuxClient("GetMissileCount"))
+        cache.GetMissileCount.last_ran = GetTime()
+    end
+    return unpack(cache.GetMissileCount.results)
 end
 
 -- Gets the info of a specific missile.
 -- spellId, spellVisualId, x, y, z, sourceObject, sourceX, sourceY, sourceZ,
 -- targetObject, targetX, targetY, targetZ
 function cxmplex:GetMissileWithIndex(index)
-	if not cache.GetMissileWithIndex[index] then
-		cache.GetMissileWithIndex[index] = { last_ran = 0 }
-	end
-	if GetTime() - cache.GetMissileWithIndex[index].last_ran > cache.pop_time then
-		cache.GetMissileWithIndex[index].results = pack(IsLinuxClient("GetMissileWithIndex", index))
-		cache.GetMissileWithIndex[index].last_ran = GetTime()
-	end
-	return unpack(cache.GetMissileWithIndex[index].results)
+    if not cache.GetMissileWithIndex[index] then
+        cache.GetMissileWithIndex[index] = { last_ran = 0 }
+    end
+    if GetTime() - cache.GetMissileWithIndex[index].last_ran > cache.pop_time then
+        cache.GetMissileWithIndex[index].results = pack(IsLinuxClient("GetMissileWithIndex", index))
+        cache.GetMissileWithIndex[index].last_ran = GetTime()
+    end
+    return unpack(cache.GetMissileWithIndex[index].results)
 end
 
 -- in-world navigation
 -- Gets the map information about the current location.
 function cxmplex:GetCurrentMapInfo()
-  return IsLinuxClient("GetCurrentMapInfo")
+    return IsLinuxClient("GetCurrentMapInfo")
 end
 -- Checks whether the navigation files for a specific map exists.
 function cxmplex:MapExists(id)
-  if not id then return end
-  return IsLinuxClient("MapExists", id)
+    if not id then return end
+    return IsLinuxClient("MapExists", id)
 end
 -- Loads a navigation map. Map files must be placed correctly before loading.
 function cxmplex:LoadMap(id)
-  if not id then return end
-  return IsLinuxClient("LoadMap", id)
+    if not id then return end
+    return IsLinuxClient("LoadMap", id)
 end
 -- Unloads a navigation map.
 function cxmplex:UnloadMap(id)
-  if not id then return end
-  return IsLinuxClient("UnloadMap", id)
+    if not id then return end
+    return IsLinuxClient("UnloadMap", id)
 end
 -- Checks if a navigation map is loaded.
 function cxmplex:IsMapLoaded(id)
-  if not id then return end
-  return IsLinuxClient("IsMapLoaded", id)
+    if not id then return end
+    return IsLinuxClient("IsMapLoaded", id)
 end
 -- Calculates a path to navigate from one position to another.
 -- Notice that the mapId must be loaded beforehand.
 function cxmplex:FindPath(id, x1, y1, z1, x2, y2, z2)
-  return IsLinuxClient("FindPath", "r9svH6YxEQbNTZGH", id, x1, y1, z1, x2, y2, z2)
+    return IsLinuxClient("FindPath", "r9svH6YxEQbNTZGH", id, x1, y1, z1, x2, y2, z2)
 end
 
 --  _____ _     _           _
@@ -468,7 +516,7 @@ end
 --   ...
 -- }
 function cxmplex:GetObjectTypeFlagsTable()
-  return IsLinuxClient("GetObjectTypeFlagsTable")
+    return IsLinuxClient("GetObjectTypeFlagsTable")
 end
 
 -- fields = {
@@ -476,7 +524,7 @@ end
 --   ...
 -- }
 function cxmplex:GetObjectFieldsTable()
-  return IsLinuxClient("GetObjectFieldsTable")
+    return IsLinuxClient("GetObjectFieldsTable")
 end
 
 -- descriptors = {
@@ -485,125 +533,139 @@ end
 --   ...
 -- }
 function cxmplex:GetObjectDescriptorsTable()
-  return IsLinuxClient("GetObjectDescriptorsTable")
+    return IsLinuxClient("GetObjectDescriptorsTable")
 end
 
 function cxmplex:GetValueTypesTable()
-  return IsLinuxClient("GetValueTypesTable")
+    return IsLinuxClient("GetValueTypesTable")
 end
 
 -- Gets a descriptor value of an object.
 function cxmplex:ObjectDescriptor(object, offset, type)
-  if not object then return end
-  return IsLinuxClient("ObjectDescriptor", object, offset, type)
+    if not object then return end
+    return IsLinuxClient("ObjectDescriptor", object, offset, type)
 end
 
 -- Gets player spec by player descriptor.
 function cxmplex:GetPlayerSpecByDescriptor(player)
-  return cxmplex:ObjectDescriptor(player, cxmplex:GetObjectDescriptorsTable().CGPlayerData__currentSpecID, cxmplex:GetValueTypesTable().UInt)
+    return cxmplex:ObjectDescriptor(player, cxmplex:GetObjectDescriptorsTable().CGPlayerData__currentSpecID, cxmplex:GetValueTypesTable().UInt)
 end
 
 -- Gets the scale of an object.
 function cxmplex:ObjectScale(object)
-  if not object then return end
-  return IsLinuxClient("ObjectScale", object)
+    if not object then return end
+    return IsLinuxClient("ObjectScale", object)
 end
 
 -- Gets the dynamic flags of an object.
 function cxmplex:ObjectDynamicFlags(object)
-  if not object then return end
-  return IsLinuxClient("ObjectDynamicFlags", object)
+    if not object then return end
+    return IsLinuxClient("ObjectDynamicFlags", object)
 end
 
 -- Gets a field value of an object.
 function cxmplex:ObjectField(object, offset, type)
-  if not object then return end
-  return IsLinuxClient("ObjectField", object, offset, type)
+    if not object then return end
+    return IsLinuxClient("ObjectField", object, offset, type)
 end
 
 -- Gets the type info of a game object.
 function cxmplex:GameObjectType(object)
-  if not object then return end
-  return IsLinuxClient("GameObjectType", object)
+    if not object then return end
+    return IsLinuxClient("GameObjectType", object)
 end
 
 function cxmplex:GetObject(object)
-  if not object then return end
-  return IsLinuxClient("GetObject", object)
+    if not object then return end
+    return IsLinuxClient("GetObject", object)
 end
 
 -- Gets the object by its GUID.
 function cxmplex:GetObjectWithGUID(GUID)
-  return IsLinuxClient("GetObjectWithGUID", GUID)
+    return IsLinuxClient("GetObjectWithGUID", GUID)
 end
 
 -- Gets the type flags of an object.
 function cxmplex:ObjectTypeFlags(object)
-  if not object then return end
-  return IsLinuxClient("ObjectTypeFlags", object)
+    if not object then return end
+    return IsLinuxClient("ObjectTypeFlags", object)
 end
 
 -- Checks if an object is of specific type.
 function cxmplex:ObjectIsType(object, type)
-  if not object then return end
-  return IsLinuxClient("ObjectIsType", object, type)
+    if not object then return end
+    return IsLinuxClient("ObjectIsType", object, type)
 end
 
 -- Checks whether an object exists in memory.
 function cxmplex:ObjectExists(object)
-  if not object then return end
-  return IsLinuxClient("ObjectExists", object)
+    if not object then return end
+    return IsLinuxClient("ObjectExists", object)
 end
 
 -- Gets the ID of an object.
 function cxmplex:ObjectId(object)
-  if not object then return end
-  return IsLinuxClient("ObjectId", object)
+    if not object then return end
+    return IsLinuxClient("ObjectId", object)
 end
 
 function cxmplex:ObjectGUID(object)
-  if not object then return end
-  return cxmplex:ObjectDescriptor(object, cxmplex:GetObjectDescriptorsTable().CGObjectData__m_guid, cxmplex:GetValueTypesTable().GUID)
+    if not object then return end
+    return cxmplex:ObjectDescriptor(object, cxmplex:GetObjectDescriptorsTable().CGObjectData__m_guid, cxmplex:GetValueTypesTable().GUID)
 end
 
 -- Gets the world position of an object.
 function cxmplex:ObjectPosition(object)
-  if object then
-    return IsLinuxClient("ObjectPosition", object)
-  else
-    return 0, 0, 0
-  end
+    if object then
+        return IsLinuxClient("ObjectPosition", object)
+    else
+        return 0, 0, 0
+    end
 end
 
 -- Gets the horizontal rotation of an object, in radian.
 function cxmplex:ObjectFacing(object)
-  if not object then return end
-  return IsLinuxClient("ObjectFacing", object)
+    if not object then return end
+    return IsLinuxClient("ObjectFacing", object)
 end
 
 -- Checks if an object is facing another object.
 function cxmplex:ObjectIsFacing(object1, object2, delta)
-  if not object1 or not object2 then return end
-  if delta then
-    return IsLinuxClient("ObjectIsFacing", object1, object2, delta)
-  else
-    return IsLinuxClient("ObjectIsFacing", object1, object2)
-  end
+    if not object1 or not object2 then return end
+    if delta then
+        return IsLinuxClient("ObjectIsFacing", object1, object2, delta)
+    else
+        return IsLinuxClient("ObjectIsFacing", object1, object2)
+    end
 end
 
 -- Checks if an object is behind another object.
 function cxmplex:ObjectIsBehind(object1, object2)
-  if not object1 or not object2 then return end
-  return IsLinuxClient("ObjectIsBehind", object1, object2)
+    if not object1 or not object2 then return end
+    return IsLinuxClient("ObjectIsBehind", object1, object2)
 end
 
 -- Checks if object is type unit.
 function cxmplex:ObjectIsUnit(object)
-  return cxmplex:ObjectIsType(object, IsLinuxClient("GetObjectTypeFlagsTable").Unit)
+    return cxmplex:ObjectIsType(object, IsLinuxClient("GetObjectTypeFlagsTable").Unit)
 end
 
 function cxmplex:ObjectIsAnimating(object)
-  return cxmplex:ObjectField(object, 60, 3) > 0
+    return cxmplex:ObjectField(object, 60, 3) > 0
+end
+
+local ObjectDynamicFlags = {
+    Lootable = 0x20,
+    TrackUnit = 0x4,
+    TaggedByOther = 0x8,
+    TaggedByMe = 0x10,
+}
+
+function cxmplex:ObjectIsGlowing(object)
+    if not object then return end
+    local descriptor = cxmplex:ObjectDescriptor(object, cxmplex:GetObjectDescriptorsTable().CGObjectData__m_dynamicFlags, cxmplex:GetValueTypesTable().UInt)
+    if not descriptor then return end
+    return bit.band(descriptor, ObjectDynamicFlags.TrackUnit) ~= 0 or bit.band(descriptor, ObjectDynamicFlags.Lootable) ~= 0
 end
 
 --  _   _       _ _
@@ -622,124 +684,124 @@ end
 --   ...
 -- }
 function cxmplex:GetUnitMovementFlagsTable()
-  return IsLinuxClient("GetUnitMovementFlagsTable")
+    return IsLinuxClient("GetUnitMovementFlagsTable")
 end
 
 -- Gets the creator object of an object.
 function cxmplex:UnitCreator(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitCreator", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitCreator", unit)
 end
 
 -- Gets the bounding radius of an unit.
 function cxmplex:UnitBoundingRadius(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitBoundingRadius", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitBoundingRadius", unit)
 end
 
 -- Gets the combat reach of an unit.
 function cxmplex:UnitCombatReach(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitCombatReach", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitCombatReach", unit)
 end
 
 -- Gets the target object of an unit.
 function cxmplex:UnitTarget(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitTarget", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitTarget", unit)
 end
 
 -- Gets the flags of an unit.
 function cxmplex:UnitFlags(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitFlags", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitFlags", unit)
 end
 
 -- Gets the casting info of a unit, an enhanced version for the BLZ API UnitCastingInfo.
 function cxmplex:UnitCasting(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitCasting", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitCasting", unit)
 end
 
 -- Gets the channel info of a unit, an enhanced version for the BLZ API
 function cxmplex:UnitChannel(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitChannel", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitChannel", unit)
 end
 
 -- Gets the casting target object of a unit.
 function cxmplex:UnitCastingTarget(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitCastingTarget", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitCastingTarget", unit)
 end
 
 -- Gets the transport object of a unit.
 function cxmplex:UnitTransport(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitTransport", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitTransport", unit)
 end
 
 -- Gets the vertical pitch of a unit, in radian.
 function cxmplex:UnitPitch(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitPitch", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitPitch", unit)
 end
 
 -- Gets the movement flags of a unit, indicating its moving status.
 function cxmplex:UnitMovementFlags(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitMovementFlags", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitMovementFlags", unit)
 end
 
 -- Gets the ID of a unit's creature type.
 function cxmplex:UnitCreatureTypeId(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitCreatureTypeId", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitCreatureTypeId", unit)
 end
 
 -- Gets the ID of a unit's creature family. nil if the unit does not have one.
 function cxmplex:UnitCreatureFamilyId(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitCreatureFamilyId", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitCreatureFamilyId", unit)
 end
 
 -- Gets the field value of a unit's creature cache struct.
 function cxmplex:UnitCreatureField(unit, offset, type)
-  if not unit then return end
-  return IsLinuxClient("UnitCreatureField", unit, offset, type)
+    if not unit then return end
+    return IsLinuxClient("UnitCreatureField", unit, offset, type)
 end
 
 -- Gets whether unit can be looted.
 function cxmplex:UnitCanBeLooted(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitIsLootable", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitIsLootable", unit)
 end
 
 -- Gets whether unit can be skinned.
 function cxmplex:UnitIsSkinnable(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitIsSkinnable", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitIsSkinnable", unit)
 end
 
 -- Gets whether unit is mounted.
 function cxmplex:UnitIsMounted(unit)
-  if not unit then return end
-  return IsLinuxClient("UnitIsMounted", unit)
+    if not unit then return end
+    return IsLinuxClient("UnitIsMounted", unit)
 end
 
 -- Gets the mount display id of the unit.
 function cxmplex:UnitMountID(unit)
-  if not unit then return end
-  return ObjectDescriptor(unit, IsLinuxClient("GetObjectDescriptorsTable").CGUnitData__mountDisplayID, IsLinuxClient("GetValueTypesTable").UInt)
+    if not unit then return end
+    return ObjectDescriptor(unit, IsLinuxClient("GetObjectDescriptorsTable").CGUnitData__mountDisplayID, IsLinuxClient("GetValueTypesTable").UInt)
 end
 
 function cxmplex:UnitIsRare(unit)
-	if not unit then return end
-	local classification_types = {
-	  rareelite = true,
-	  rare = true
-	}
-  return classification_types[UnitClassification(unit)]
+    if not unit then return end
+    local classification_types = {
+        rareelite = true,
+        rare = true
+    }
+    return classification_types[UnitClassification(unit)]
 end
 
 
@@ -754,187 +816,187 @@ end
 
 -- Gets the count of all world objects, also updates all objects.
 function cxmplex:GetObjectCount()
-	if GetTime() - cache.GetObjectCount.last_ran > cache.pop_time then
-		cache.GetObjectCount.results = pack(IsLinuxClient("GetObjectCount"))
-		cache.GetObjectCount.last_ran = GetTime()
-	end
-	return unpack(cache.GetObjectCount.results)
+    if GetTime() - cache.GetObjectCount.last_ran > cache.pop_time then
+        cache.GetObjectCount.results = pack(IsLinuxClient("GetObjectCount"))
+        cache.GetObjectCount.last_ran = GetTime()
+    end
+    return unpack(cache.GetObjectCount.results)
 end
 
 -- Gets a specific world object by its index.
 function cxmplex:GetObjectWithIndex(index)
-	if not index then return end
-	if not cache.GetObjectWithIndex[index] then
-		cache.GetObjectWithIndex[index] = { last_ran = 0 }
-	end
-	if GetTime() - cache.GetObjectWithIndex[index].last_ran > cache.pop_time then
-		cache.GetObjectWithIndex[index].results = pack(IsLinuxClient("GetObjectWithIndex", index))
-		cache.GetObjectWithIndex[index].last_ran = GetTime()
-	end
-	return unpack(cache.GetObjectWithIndex[index].results)
+    if not index then return end
+    if not cache.GetObjectWithIndex[index] then
+        cache.GetObjectWithIndex[index] = { last_ran = 0 }
+    end
+    if GetTime() - cache.GetObjectWithIndex[index].last_ran > cache.pop_time then
+        cache.GetObjectWithIndex[index].results = pack(IsLinuxClient("GetObjectWithIndex", index))
+        cache.GetObjectWithIndex[index].last_ran = GetTime()
+    end
+    return unpack(cache.GetObjectWithIndex[index].results)
 end
 
 -- Gets the count of all npcs, also updates npcs.
 function cxmplex:GetNpcCount(pointer, range)
-  if not pointer then return end
-	if not cache.GetNpcCount[pointer] then
-		cache.GetNpcCount[pointer] = { last_ran = 0 }
-	end
-	if range and not cache.GetNpcCount[pointer][range] then
-		cache.GetNpcCount[pointer][range] = { last_ran = 0 }
-	end
-  if range and GetTime() - cache.GetNpcCount[pointer][range].last_ran > cache.pop_time then
-    cache.GetNpcCount[pointer][range].results = pack(IsLinuxClient("GetNpcCount", pointer, range))
-		cache.GetNpcCount[pointer][range].last_ran = GetTime()
-  elseif not range and GetTime() - cache.GetNpcCount[pointer].last_ran > cache.pop_time then
-    cache.GetNpcCount[pointer].results = pack(IsLinuxClient("GetNpcCount", pointer))
-		cache.GetNpcCount[pointer].last_ran = GetTime()
-  end
-	if range then
-		return unpack(cache.GetNpcCount[pointer][range].results)
-	end
-	return unpack(cache.GetNpcCount[pointer].results)
+    if not pointer then return end
+    if not cache.GetNpcCount[pointer] then
+        cache.GetNpcCount[pointer] = { last_ran = 0 }
+    end
+    if range and not cache.GetNpcCount[pointer][range] then
+        cache.GetNpcCount[pointer][range] = { last_ran = 0 }
+    end
+    if range and GetTime() - cache.GetNpcCount[pointer][range].last_ran > cache.pop_time then
+        cache.GetNpcCount[pointer][range].results = pack(IsLinuxClient("GetNpcCount", pointer, range))
+        cache.GetNpcCount[pointer][range].last_ran = GetTime()
+    elseif not range and GetTime() - cache.GetNpcCount[pointer].last_ran > cache.pop_time then
+        cache.GetNpcCount[pointer].results = pack(IsLinuxClient("GetNpcCount", pointer))
+        cache.GetNpcCount[pointer].last_ran = GetTime()
+    end
+    if range then
+        return unpack(cache.GetNpcCount[pointer][range].results)
+    end
+    return unpack(cache.GetNpcCount[pointer].results)
 end
 
 -- Gets a specific npc by its index.
 function cxmplex:GetNpcWithIndex(index)
-	if not index then return end
-	if not cache.GetNpcWithIndex[index] then
-		cache.GetNpcWithIndex[index] = { last_ran = 0 }
-	end
-	if GetTime() - cache.GetNpcWithIndex[index].last_ran > cache.pop_time then
-		cache.GetNpcWithIndex[index].results = pack(IsLinuxClient("GetNpcWithIndex", index))
-		cache.GetNpcWithIndex[index].last_ran = GetTime()
-	end
-	return unpack(cache.GetNpcWithIndex[index].results)
+    if not index then return end
+    if not cache.GetNpcWithIndex[index] then
+        cache.GetNpcWithIndex[index] = { last_ran = 0 }
+    end
+    if GetTime() - cache.GetNpcWithIndex[index].last_ran > cache.pop_time then
+        cache.GetNpcWithIndex[index].results = pack(IsLinuxClient("GetNpcWithIndex", index))
+        cache.GetNpcWithIndex[index].last_ran = GetTime()
+    end
+    return unpack(cache.GetNpcWithIndex[index].results)
 end
 
 -- Gets the count of specific players.
 function cxmplex:GetPlayerCount(pointer, range)
-	if not pointer then return end
-	if not cache.GetPlayerCount[pointer] then
-		cache.GetPlayerCount[pointer] = { last_ran = 0 }
-	end
-	if range and not cache.GetPlayerCount[pointer][range] then
-		cache.GetPlayerCount[pointer][range] = { last_ran = 0 }
-	end
-  if range and GetTime() - cache.GetPlayerCount[pointer][range].last_ran > cache.pop_time then
-    cache.GetPlayerCount[pointer][range].results = pack(IsLinuxClient("GetPlayerCount", pointer, range))
-		cache.GetPlayerCount[pointer][range].last_ran = GetTime()
-  elseif not range and GetTime() - cache.GetPlayerCount[pointer].last_ran > cache.pop_time then
-    cache.GetPlayerCount[pointer].results = pack(IsLinuxClient("GetPlayerCount", pointer))
-		cache.GetPlayerCount[pointer].last_ran = GetTime()
-  end
-	if range then
-		return unpack(cache.GetPlayerCount[pointer][range].results)
-	end
-	return unpack(cache.GetPlayerCount[pointer].results)
+    if not pointer then return end
+    if not cache.GetPlayerCount[pointer] then
+        cache.GetPlayerCount[pointer] = { last_ran = 0 }
+    end
+    if range and not cache.GetPlayerCount[pointer][range] then
+        cache.GetPlayerCount[pointer][range] = { last_ran = 0 }
+    end
+    if range and GetTime() - cache.GetPlayerCount[pointer][range].last_ran > cache.pop_time then
+        cache.GetPlayerCount[pointer][range].results = pack(IsLinuxClient("GetPlayerCount", pointer, range))
+        cache.GetPlayerCount[pointer][range].last_ran = GetTime()
+    elseif not range and GetTime() - cache.GetPlayerCount[pointer].last_ran > cache.pop_time then
+        cache.GetPlayerCount[pointer].results = pack(IsLinuxClient("GetPlayerCount", pointer))
+        cache.GetPlayerCount[pointer].last_ran = GetTime()
+    end
+    if range then
+        return unpack(cache.GetPlayerCount[pointer][range].results)
+    end
+    return unpack(cache.GetPlayerCount[pointer].results)
 end
 
 -- Gets the specific player by index.
 function cxmplex:GetPlayerWithIndex(index)
-	if not index then return end
-	if not cache.GetPlayerWithIndex[index] then
-		cache.GetPlayerWithIndex[index] = { last_ran = 0 }
-	end
-	if GetTime() - cache.GetPlayerWithIndex[index].last_ran > cache.pop_time then
-		cache.GetPlayerWithIndex[index].results = pack(IsLinuxClient("GetPlayerWithIndex", index))
-		cache.GetPlayerWithIndex[index].last_ran = GetTime()
-	end
-	return unpack(cache.GetPlayerWithIndex[index].results)
+    if not index then return end
+    if not cache.GetPlayerWithIndex[index] then
+        cache.GetPlayerWithIndex[index] = { last_ran = 0 }
+    end
+    if GetTime() - cache.GetPlayerWithIndex[index].last_ran > cache.pop_time then
+        cache.GetPlayerWithIndex[index].results = pack(IsLinuxClient("GetPlayerWithIndex", index))
+        cache.GetPlayerWithIndex[index].last_ran = GetTime()
+    end
+    return unpack(cache.GetPlayerWithIndex[index].results)
 end
 
 -- Gets the count of specific game objects, also updates game objects.
 function cxmplex:GetGameObjectCount(pointer, range)
-	if not cache.GetGameObjectCount[range] or GetTime() - cache.GetGameObjectCount[range].last_ran > cache.pop_time then
-		cache.GetGameObjectCount[range] = {}
-		cache.GetGameObjectCount[range].results = pack(IsLinuxClient("GetGameObjectCount"))
-		cache.GetGameObjectCount[range].last_ran = GetTime()
-	end
-	return unpack(cache.GetGameObjectCount[range].results)
+    if not cache.GetGameObjectCount[range] or GetTime() - cache.GetGameObjectCount[range].last_ran > cache.pop_time then
+        cache.GetGameObjectCount[range] = {}
+        cache.GetGameObjectCount[range].results = pack(IsLinuxClient("GetGameObjectCount"))
+        cache.GetGameObjectCount[range].last_ran = GetTime()
+    end
+    return unpack(cache.GetGameObjectCount[range].results)
 end
 
 -- Gets the specific game object by index.
 function cxmplex:GetGameObjectWithIndex(index)
-	if not index then return end
-	if not cache.GetGameObjectWithIndex[index] then
-		cache.GetGameObjectWithIndex[index] = { last_ran = 0 }
-	end
-	if GetTime() - cache.GetGameObjectWithIndex[index].last_ran > cache.pop_time then
-		cache.GetGameObjectWithIndex[index].results = pack(IsLinuxClient("GetGameObjectWithIndex", index))
-		cache.GetGameObjectWithIndex[index].last_ran = GetTime()
-	end
-	return unpack(cache.GetGameObjectWithIndex[index].results)
+    if not index then return end
+    if not cache.GetGameObjectWithIndex[index] then
+        cache.GetGameObjectWithIndex[index] = { last_ran = 0 }
+    end
+    if GetTime() - cache.GetGameObjectWithIndex[index].last_ran > cache.pop_time then
+        cache.GetGameObjectWithIndex[index].results = pack(IsLinuxClient("GetGameObjectWithIndex", index))
+        cache.GetGameObjectWithIndex[index].last_ran = GetTime()
+    end
+    return unpack(cache.GetGameObjectWithIndex[index].results)
 end
 
 -- Gets the count of specific dynamic objects, also updates dynamic objects.
 function cxmplex:GetDynamicObjectCount(pointer, range)
-	if not pointer then return end
-	if not cache.GetDynamicObjectCount[pointer] then
-		cache.GetDynamicObjectCount[pointer] = { last_ran = 0 }
-	end
-	if range and not cache.GetDynamicObjectCount[pointer][range] then
-		cache.GetDynamicObjectCount[pointer][range] = { last_ran = 0 }
-	end
-  if range and GetTime() - cache.GetDynamicObjectCount[pointer][range].last_ran > cache.pop_time then
-    cache.GetDynamicObjectCount[pointer][range].results = pack(IsLinuxClient("GetDynamicObjectCount", pointer, range))
-		cache.GetDynamicObjectCount[pointer][range].last_ran = GetTime()
-  elseif not range and GetTime() - cache.GetDynamicObjectCount[pointer].last_ran > cache.pop_time then
-    cache.GetDynamicObjectCount[pointer].results = pack(IsLinuxClient("GetDynamicObjectCount", pointer))
-		cache.GetDynamicObjectCount[pointer].last_ran = GetTime()
-  end
-	if range then
-		return unpack(cache.GetDynamicObjectCount[pointer][range].results)
-	end
-	return unpack(cache.GetDynamicObjectCount[pointer].results)
+    if not pointer then return end
+    if not cache.GetDynamicObjectCount[pointer] then
+        cache.GetDynamicObjectCount[pointer] = { last_ran = 0 }
+    end
+    if range and not cache.GetDynamicObjectCount[pointer][range] then
+        cache.GetDynamicObjectCount[pointer][range] = { last_ran = 0 }
+    end
+    if range and GetTime() - cache.GetDynamicObjectCount[pointer][range].last_ran > cache.pop_time then
+        cache.GetDynamicObjectCount[pointer][range].results = pack(IsLinuxClient("GetDynamicObjectCount", pointer, range))
+        cache.GetDynamicObjectCount[pointer][range].last_ran = GetTime()
+    elseif not range and GetTime() - cache.GetDynamicObjectCount[pointer].last_ran > cache.pop_time then
+        cache.GetDynamicObjectCount[pointer].results = pack(IsLinuxClient("GetDynamicObjectCount", pointer))
+        cache.GetDynamicObjectCount[pointer].last_ran = GetTime()
+    end
+    if range then
+        return unpack(cache.GetDynamicObjectCount[pointer][range].results)
+    end
+    return unpack(cache.GetDynamicObjectCount[pointer].results)
 end
 
 -- Gets a specific dynamic object by index.
 function cxmplex:GetDynamicObjectWithIndex(index)
-	if not index then return end
-	if not cache.GetDynamicObjectWithIndex[index] then
-		cache.GetDynamicObjectWithIndex[index] = { last_ran = 0 }
-	end
-	if GetTime() - cache.GetDynamicObjectWithIndex[index].last_ran > cache.pop_time then
-		cache.GetDynamicObjectWithIndex[index].results = pack(IsLinuxClient("GetDynamicObjectWithIndex", index))
-		cache.GetDynamicObjectWithIndex[index].last_ran = GetTime()
-	end
-	return unpack(cache.GetDynamicObjectWithIndex[index].results)
+    if not index then return end
+    if not cache.GetDynamicObjectWithIndex[index] then
+        cache.GetDynamicObjectWithIndex[index] = { last_ran = 0 }
+    end
+    if GetTime() - cache.GetDynamicObjectWithIndex[index].last_ran > cache.pop_time then
+        cache.GetDynamicObjectWithIndex[index].results = pack(IsLinuxClient("GetDynamicObjectWithIndex", index))
+        cache.GetDynamicObjectWithIndex[index].last_ran = GetTime()
+    end
+    return unpack(cache.GetDynamicObjectWithIndex[index].results)
 end
 
 -- Gets the count of specific area triggers
 function cxmplex:GetAreaTriggerCount(pointer, range)
-	if not pointer then return end
-	if not cache.GetAreaTriggerCount[pointer] then
-		cache.GetAreaTriggerCount[pointer] = { last_ran = 0 }
-	end
-	if range and not cache.GetAreaTriggerCount[pointer][range] then
-		cache.GetAreaTriggerCount[pointer][range] = { last_ran = 0 }
-	end
-  if range and GetTime() - cache.GetAreaTriggerCount[pointer][range].last_ran > cache.pop_time then
-    cache.GetAreaTriggerCount[pointer][range].results = pack(IsLinuxClient("GetAreaTriggerCount", pointer, range))
-		cache.GetAreaTriggerCount[pointer][range].last_ran = GetTime()
-  elseif not range and GetTime() - cache.GetAreaTriggerCount[pointer].last_ran > cache.pop_time then
-    cache.GetAreaTriggerCount[pointer].results = pack(IsLinuxClient("GetAreaTriggerCount", pointer))
-		cache.GetAreaTriggerCount[pointer].last_ran = GetTime()
-  end
-	if range then
-		return unpack(cache.GetAreaTriggerCount[pointer][range].results)
-	end
-	return unpack(cache.GetAreaTriggerCount[pointer].results)
+    if not pointer then return end
+    if not cache.GetAreaTriggerCount[pointer] then
+        cache.GetAreaTriggerCount[pointer] = { last_ran = 0 }
+    end
+    if range and not cache.GetAreaTriggerCount[pointer][range] then
+        cache.GetAreaTriggerCount[pointer][range] = { last_ran = 0 }
+    end
+    if range and GetTime() - cache.GetAreaTriggerCount[pointer][range].last_ran > cache.pop_time then
+        cache.GetAreaTriggerCount[pointer][range].results = pack(IsLinuxClient("GetAreaTriggerCount", pointer, range))
+        cache.GetAreaTriggerCount[pointer][range].last_ran = GetTime()
+    elseif not range and GetTime() - cache.GetAreaTriggerCount[pointer].last_ran > cache.pop_time then
+        cache.GetAreaTriggerCount[pointer].results = pack(IsLinuxClient("GetAreaTriggerCount", pointer))
+        cache.GetAreaTriggerCount[pointer].last_ran = GetTime()
+    end
+    if range then
+        return unpack(cache.GetAreaTriggerCount[pointer][range].results)
+    end
+    return unpack(cache.GetAreaTriggerCount[pointer].results)
 end
 
 -- Gets a specific AreaTrigger by index
 function cxmplex:GetAreaTriggerWithIndex(index)
-	if not index then return end
-	if not cache.GetAreaTriggerWithIndex[index] then
-		cache.GetAreaTriggerWithIndex[index] = { last_ran = 0 }
-	end
-	if GetTime() - cache.GetAreaTriggerWithIndex[index].last_ran > cache.pop_time then
-		cache.GetAreaTriggerWithIndex[index].results = pack(IsLinuxClient("GetAreaTriggerWithIndex", index))
-		cache.GetAreaTriggerWithIndex[index].last_ran = GetTime()
-	end
-	return unpack(cache.GetAreaTriggerWithIndex[index].results)
+    if not index then return end
+    if not cache.GetAreaTriggerWithIndex[index] then
+        cache.GetAreaTriggerWithIndex[index] = { last_ran = 0 }
+    end
+    if GetTime() - cache.GetAreaTriggerWithIndex[index].last_ran > cache.pop_time then
+        cache.GetAreaTriggerWithIndex[index].results = pack(IsLinuxClient("GetAreaTriggerWithIndex", index))
+        cache.GetAreaTriggerWithIndex[index].last_ran = GetTime()
+    end
+    return unpack(cache.GetAreaTriggerWithIndex[index].results)
 end
 
 --  _____            _ _
@@ -950,12 +1012,12 @@ end
 -- false (boolean): There is no cursor spell pending.
 -- spellId (number): The ID of the spell pending on cursor.
 function cxmplex:IsAoEPending()
-  return IsLinuxClient("IsAoEPending")
+    return IsLinuxClient("IsAoEPending")
 end
 
 -- Cancels the pending spell on the cursor.
 function cxmplex:CancelPendingSpell()
-  return IsLinuxClient("CancelPendingSpell")
+    return IsLinuxClient("CancelPendingSpell")
 end
 
 --  _____ _        _
@@ -967,12 +1029,12 @@ end
 
 -- Resets the timer for AFK
 function cxmplex:ResetAfk()
-  return IsLinuxClient("ResetAfk")
+    return IsLinuxClient("ResetAfk")
 end
 
 -- Gets the name of the current WoW account. (same as the WTF subfolder)
 function cxmplex:GetCurrentAccount()
-  return IsLinuxClient("GetCurrentAccount")
+    return IsLinuxClient("GetCurrentAccount")
 end
 
 --  _   _ _     _
@@ -984,96 +1046,218 @@ end
 
 -- RayTrace
 function cxmplex:TraceLine(x1, y1, z1, x2, y2, z2, flags)
-  return IsLinuxClient("TraceLine", x1, y1, z1, x2, y2, z2, flags)
+    return IsLinuxClient("TraceLine", x1, y1, z1, x2, y2, z2, flags)
 end
 function cxmplex:InLineOfSight(obj1, obj2)
-  if UnitIsVisible(obj1) and UnitIsVisible(obj2) then
-    local X1, Y1, Z1 = cxmplex:ObjectPosition(obj1)
-    local X2, Y2, Z2 = cxmplex:ObjectPosition(obj2)
-    return not cxmplex:TraceLine(X1, Y1, Z1 + 2, X2, Y2, Z2 + 2, 0x100011)
-  end
+    if not obj1 or not obj2 then return end
+    if UnitIsVisible(obj1) and UnitIsVisible(obj2) then
+        local X1, Y1, Z1 = cxmplex:ObjectPosition(obj1)
+        local X2, Y2, Z2 = cxmplex:ObjectPosition(obj2)
+        return not cxmplex:TraceLine(X1, Y1, Z1 + 2, X2, Y2, Z2 + 2, 0x100011)
+    end
 end
 -- Gets the position of the camera.
 function cxmplex:GetCameraPosition()
-  return IsLinuxClient("GetCameraPosition")
+    return IsLinuxClient("GetCameraPosition")
 end
 
 -- Projects a world position to the screen NDC position
 function cxmplex.WorldToScreen(x, y, z)
-  return IsLinuxClient("WorldToScreen", x, y, z)
+    return IsLinuxClient("WorldToScreen", x, y, z)
 end
 
 function cxmplex:CallMount()
-  for i = 1, GetNumCompanions("MOUNT") do
-    if C_MountJournal.GetIsFavorite(i) then
-      C_Timer.After(math.random(), function() if not UnitCastingInfo("player") then C_MountJournal.SummonByID(0) end end)
-      return true
+    for i = 1, GetNumCompanions("MOUNT") do
+        if C_MountJournal.GetIsFavorite(i) then
+            C_Timer.After(math.random(), function() if not UnitCastingInfo("player") then C_MountJournal.SummonByID(0) end end)
+            return true
+        end
     end
-  end
 end
 
 ----------------- MISC
 function cxmplex:DrawText(x, y, text)
-  print(x .. " " .. y)
-  if x == 0 or y == 0 then return end
-  local screen_physical_width, screen_physical_height = GetPhysicalScreenSize();
-  local scale_x = 768 / GetScreenHeight() * GetScreenWidth() / (screen_physical_width * UIParent:GetEffectiveScale());
-  local scale_y = 768 / (screen_physical_height * UIParent:GetEffectiveScale());
-  label = CreateFrame("Frame", nil, UIParent);
-  label_font_string = label:CreateFontString(nil, "BORDER");
-  label_font_string:SetPoint("TOPLEFT");
-  label_font_string:SetFont("Fonts\\FRIZQT__.TTF", 11, "OUTLINE, MONOCHROME")
-  label_font_string:SetJustifyH("CENTER");
-  label_font_string:SetText(text);
-  label:SetWidth(label_font_string:GetStringWidth());
-  label:SetHeight(label_font_string:GetStringHeight());
-  print("converted " .. x * screen_physical_width * scale_x .. " " .. y * screen_physical_height * scale_y)
-  label:SetPoint("BOTTOMLEFT", x * screen_physical_width * scale_x, y * screen_physical_height * scale_y);
-  label:Show()
+    print(x .. " " .. y)
+    if x == 0 or y == 0 then return end
+    local screen_physical_width, screen_physical_height = GetPhysicalScreenSize();
+    local scale_x = 768 / GetScreenHeight() * GetScreenWidth() / (screen_physical_width * UIParent:GetEffectiveScale());
+    local scale_y = 768 / (screen_physical_height * UIParent:GetEffectiveScale());
+    label = CreateFrame("Frame", nil, UIParent);
+    label_font_string = label:CreateFontString(nil, "BORDER");
+    label_font_string:SetPoint("TOPLEFT");
+    label_font_string:SetFont("Fonts\\FRIZQT__.TTF", 11, "OUTLINE, MONOCHROME")
+    label_font_string:SetJustifyH("CENTER");
+    label_font_string:SetText(text);
+    label:SetWidth(label_font_string:GetStringWidth());
+    label:SetHeight(label_font_string:GetStringHeight());
+    print("converted " .. x * screen_physical_width * scale_x .. " " .. y * screen_physical_height * scale_y)
+    label:SetPoint("BOTTOMLEFT", x * screen_physical_width * scale_x, y * screen_physical_height * scale_y);
+    label:Show()
 end
 
 function cxmplex:TraceLogObjects()
-  local dCount = cxmplex:GetDynamicObjectCount("player", 40) or 0
-  local mCount = cxmplex:GetMissileCount() or 0
-  -- print("Dynamic Object Count: " .. dCount)
-  -- print("Missile Count: " .. mCount)
-  if dCount > 0 then
-    for i = 1, dCount do
-      local object = cxmplex:GetDynamicObjectWithIndex(i)
-      local typeId, typeName = cxmplex:GameObjectType(object)
-      print("Dynamic Object [" .. typeId .. "] " .. typeName)
+    local dCount = cxmplex:GetDynamicObjectCount("player", 40) or 0
+    local mCount = cxmplex:GetMissileCount() or 0
+    -- print("Dynamic Object Count: " .. dCount)
+    -- print("Missile Count: " .. mCount)
+    if dCount > 0 then
+        for i = 1, dCount do
+            local object = cxmplex:GetDynamicObjectWithIndex(i)
+            local typeId, typeName = cxmplex:GameObjectType(object)
+            print("Dynamic Object [" .. typeId .. "] " .. typeName)
+        end
     end
-  end
-  if mCount > 0 then
-    for i = 1, mCount do
-      local spellId, spellVisualId, x, y, z, sourceObject, sourceX, sourceY, sourceZ, targetObject, targetX, targetY, targetZ = cxmplex:GetMissileWithIndex(i)
-      local spellName = select(1, GetSpellInfo(spellId))
-      if spellName == "Shadow Crash" then
-        print("Missile Info: \n" .. spellName .. "\n" .. "Location: " .. x .. " " .. y .. " " .. z .. "\n" .. "Source Location: " .. sourceX .. " " .. sourceY .. " " .. sourceZ .. "\n")
-        print("Target Location: " .. targetX .. " " .. targetY .. " " .. targetZ)
-        local isOnScreen, sX, sY = cxmplex:WorldToScreen(targetX, targetY, targetZ)
-        print("Target screen: " .. tostring(isOnScreen) .. " " .. sX .. " " .. sY)
-        cxmplex:DrawText(sX, sY, spellName .. " TARGET")
-        isOnScreen, sX, sY = cxmplex:WorldToScreen(sourceX, sourceY, sourceZ)
-        print("source screen: " .. tostring(isOnScreen) .. " " .. sX .. " " .. sY)
-        cxmplex:DrawText(sX, sY, spellName .. " SOURCE")
-        isOnScreen, sX, sY = cxmplex:WorldToScreen(x, y, z)
-        print("default screen: " .. tostring(isOnScreen) .. " " .. sX .. " " .. sY)
-        cxmplex:DrawText(sX, sY, spellName .. " DEFAULT")
-      end
+    if mCount > 0 then
+        for i = 1, mCount do
+            local spellId, spellVisualId, x, y, z, sourceObject, sourceX, sourceY, sourceZ, targetObject, targetX, targetY, targetZ = cxmplex:GetMissileWithIndex(i)
+            local spellName = select(1, GetSpellInfo(spellId))
+            if spellName == "Shadow Crash" then
+                print("Missile Info: \n" .. spellName .. "\n" .. "Location: " .. x .. " " .. y .. " " .. z .. "\n" .. "Source Location: " .. sourceX .. " " .. sourceY .. " " .. sourceZ .. "\n")
+                print("Target Location: " .. targetX .. " " .. targetY .. " " .. targetZ)
+                local isOnScreen, sX, sY = cxmplex:WorldToScreen(targetX, targetY, targetZ)
+                print("Target screen: " .. tostring(isOnScreen) .. " " .. sX .. " " .. sY)
+                cxmplex:DrawText(sX, sY, spellName .. " TARGET")
+                isOnScreen, sX, sY = cxmplex:WorldToScreen(sourceX, sourceY, sourceZ)
+                print("source screen: " .. tostring(isOnScreen) .. " " .. sX .. " " .. sY)
+                cxmplex:DrawText(sX, sY, spellName .. " SOURCE")
+                isOnScreen, sX, sY = cxmplex:WorldToScreen(x, y, z)
+                print("default screen: " .. tostring(isOnScreen) .. " " .. sX .. " " .. sY)
+                cxmplex:DrawText(sX, sY, spellName .. " DEFAULT")
+            end
+        end
     end
-  end
 end
 
 -- movement
 
 function cxmplex:Face(pointer, update)
-  local pointer = pointer or "target"
-  cxmplex:FaceDirection(cxmplex:GetAnglesBetweenObjects("player", pointer), update)
+    local pointer = pointer or "target"
+    cxmplex:FaceDirection(cxmplex:GetAnglesBetweenObjects("player", pointer), update)
 end
 
 
 -- security
 function cxmplex:SpoofKeyPress()
 
+end
+
+
+-- quests
+
+local quest_tooltip = CreateFrame("GameTooltip", "QuestPlateTooltipScanQuest", nil, "GameTooltipTemplate")
+local ScannedQuestTextCache = {}
+cxmplex.QuestCache = {}
+
+local function UpdateQuestCache()
+    local ignoreQuest = {
+        [56064] = true, -- Assault Black Empire (Vale)
+        [57157] = true, -- Assault Black Empire (Uldum)
+        [55350] = true, -- Assault Amathet Advance
+        [56308] = true, -- Assault Aqir Unearthed
+        [57008] = true, -- Assault The Warring Clans
+        [57728] = true, --- Assault: The Endless Swarm
+    }
+    wipe(cxmplex.QuestCache)
+
+    if IsInInstance() then return end
+
+    --update the quest cache
+    local numEntries, numQuests = C_QuestLog.GetNumQuestLogEntries()
+    for questIdx = 1, numEntries do
+        -- local title, level, suggestedGroup, isHeader, isCollapsed, isComplete, frequency, questId, startEvent, displayQuestID, isOnMap, hasLocalPOI, isTask, isStory = GetQuestLogTitle (questId)
+        local title, _, questId = C_QuestLog.GetInfo(questIdx)
+        if type (questId) == "number" and questId > 0 and not ignoreQuest[questId] then -- and not isComplete
+            cxmplex.QuestCache[title] = true
+        end
+    end
+
+    local mapId = C_Map.GetBestMapForUnit ("player")
+    if (mapId) then
+        local worldQuests = C_TaskQuest.GetQuestsForPlayerByMapID (mapId)
+        if (type (worldQuests) == "table") then
+            for _, questTable in ipairs (worldQuests) do
+                local x, y, floor, numObjectives, questId, inProgress = questTable.x, questTable.y, questTable.floor, questTable.numObjectives, questTable.questId, questTable.inProgress
+                if (type (questId) == "number" and questId > 0 and ignoreQuest[questId] == nil) then
+                    local questName = C_TaskQuest.GetQuestInfoByQuestID (questId)
+                    if (questName) then
+                        cxmplex.QuestCache[questName] = true
+                    end
+                end
+            end
+        end
+    end
+end
+
+
+local function QuestCacheOnUpdate(self, event, ...)
+    if not self.last_time then
+        self.last_time = 0
+    end
+    if GetTime() - self.last_time > 2 then
+        UpdateQuestCache()
+        self.last_time = GetTime()
+    end
+end
+
+local quest_scanner_frame = CreateFrame("Frame", "QuestFrame", UIParent)
+quest_scanner_frame:RegisterEvent ("QUEST_ACCEPTED")
+quest_scanner_frame:RegisterEvent ("QUEST_REMOVED")
+quest_scanner_frame:RegisterEvent ("QUEST_ACCEPT_CONFIRM")
+quest_scanner_frame:RegisterEvent ("QUEST_COMPLETE")
+quest_scanner_frame:RegisterEvent ("QUEST_POI_UPDATE")
+quest_scanner_frame:RegisterEvent ("QUEST_DETAIL")
+quest_scanner_frame:RegisterEvent ("QUEST_FINISHED")
+quest_scanner_frame:RegisterEvent ("QUEST_GREETING")
+quest_scanner_frame:RegisterEvent ("QUEST_LOG_UPDATE")
+quest_scanner_frame:RegisterEvent ("UNIT_QUEST_LOG_CHANGED")
+quest_scanner_frame:SetScript("OnEvent", QuestCacheOnUpdate)
+
+function cxmplex:IsQuestObject(object)
+    if not object then return end
+    if not cache.IsQuestObject[object] then
+        cache.IsQuestObject[object] = { last_ran = 0 }
+    end
+    if GetTime() - cache.IsQuestObject[object].last_ran > 1 then
+        if cxmplex:ObjectIsGlowing(object) then cache.IsQuestObject[object].results = true cache.IsQuestObject[object].last_ran = GetTime() end
+        local guid = cxmplex:ObjectGUID(object)
+        quest_tooltip:SetOwner(_G.WorldFrame, 'ANCHOR_NONE')
+        quest_tooltip:SetHyperlink('unit:' .. guid)
+        for i = 1, quest_tooltip:NumLines() do
+            ScannedQuestTextCache[i] = _G["QuestPlateTooltipScanQuestTextLeft" .. i]
+        end
+
+        local is_quest_unit = false
+        local one_quest_unfinished = false
+
+        for i = 1, #ScannedQuestTextCache do
+            local text = ScannedQuestTextCache[i]:GetText()
+            if cxmplex.quest_cache[text] then
+                is_quest_unit = true
+                local j = i
+                while(ScannedQuestTextCache[j + 1]) do
+                    local next_line_text = ScannedQuestTextCache[j + 1]:GetText()
+                    if next_line_text then
+                        if not next_line_text:match(THREAT_TOOLTIP) then
+                            local p1, p2 = next_line_text:match("(%d+)/(%d+)")
+                            if not p1 then
+                                p1 = nextLineText:match ("(%d+%%)")
+                                if p1 then
+                                    p1 = string.gsub(p1, "%%", '')
+                                end
+                            end
+                            if (p1 and p2 and not p1 == p2) or (p1 and not p2 and not p1 == 100) then
+                                one_quest_unfinished = true
+                            end
+                        else
+                            j = 99
+                        end
+                    end
+                    j = j + 1
+                end
+            end
+        end
+        cache.IsQuestObject[object].results = pack((is_quest_unit and one_quest_unfinished and (not UnitIsDeadOrGhost(object) or UnitIsFriend("player", object))))
+        cache.IsQuestObject[object].last_ran = GetTime()
+    end
+    return unpack(cache.IsQuestObject[object].results)
 end

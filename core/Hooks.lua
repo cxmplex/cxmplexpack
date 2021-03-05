@@ -33,3 +33,11 @@ function cxmplex:CreateChatHook()
     oSendChatMessage(msg, ...)
   end
 end
+
+function cxmplex:CreateTrackAchievementHook()
+	oAddTrackedAchievement = AddTrackedAchievement
+	AddTrackedAchievement = function(...)
+		cxmplex.core_frame:GetScript("OnEvent")(cxmplex.core_frame, "TRACKED_ACHIEVEMENT_UPDATE")
+		oAddTrackedAchievement(...)
+	end
+end

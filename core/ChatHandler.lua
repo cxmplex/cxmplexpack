@@ -33,14 +33,23 @@ function cxmplex:RunCommand(msg)
       cxmplex:AddDrawingCallback("objectTracker", cxmplex.DrawTrackedObjects)
     else
       cxmplex:RemoveDrawingCallback("objectTracker")
+			cxmplex:DestroyObjectManager()
     end
   elseif cmd == "track" and args then
-    local _, _, action, id = string.find(args, "%s?(%w+)%s?(%d+)")
+    local _, _, action, id = string.find(args, "%s?(%w+)%s?(%w+)")
     if action == "add" then
       cxmplex:AddObjectToTrackerById(tonumber(id))
+			SendSystemMessage("Added ID: " .. id)
     elseif action == "del" then
       cxmplex:RemoveObjectFromTrackerById(tonumber(id))
-    end
+    elseif args == "all" then
+			cxmplex:TrackAllObjects()
+		elseif args == "quest" then
+			cxmplex_savedvars.track_quest_objects = not cxmplex_savedvars.track_quest_objects
+			SendSystemMessage("Track Quest Objects: " .. tostring(cxmplex_savedvars.track_quest_objects))
+		elseif action == "quest" and id == "reset" then
+			cxmplex_savedvars.objects_to_track.quest = {}
+		end
   elseif cmd == "farm" and args then
     if args == "stop" then
       cxmplex:DestroyAllFarmers()

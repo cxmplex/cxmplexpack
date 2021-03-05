@@ -6,7 +6,8 @@
 core\Variables.lua
 core\API.lua
 core\Hooks.lua
-core\ObjectTracker.lua
+core\objects\API.lua
+core\objects\Manager.lua
 core\Drawing.lua
 core\Events.lua
 core\Farming.lua

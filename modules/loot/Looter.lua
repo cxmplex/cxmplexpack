@@ -3,7 +3,6 @@ local private = { delay = 0.5 }
 local function GetLootableUnit()
   for i = 1, cxmplex:GetObjectCount() do
     local object = cxmplex:GetObjectWithIndex(i)
-    local distance = cxmplex:GetDistanceBetweenObjects("player", object)
     if cxmplex:UnitCanBeLooted(object) and cxmplex:InLineOfSight("player", object) and UnitIsVisible(object) and UnitIsDeadOrGhost(object) then
       private.lootable_unit = object
 			return
@@ -13,8 +12,13 @@ end
 
 local function Gather()
 	GetLootableUnit()
-	if not private.combat and private.lootable_unit then
-    local distance = CalculateDistance("player", private.lootable_unit)
+	if not private.combat and private.lootable_unit ~= nil and not UnitIsDeadOrGhost("player") then
+		local distance = cxmplex:GetDistanceBetweenObjects("player", private.lootable_unit)
+		if not distance then
+			private.lootable_unit = nil
+			cxmplex.HAS_LOOTABLE_UNIT = false
+			return
+		end
     if distance <= 3 then
       cxmplex.HAS_LOOTABLE_UNIT = true
       InteractUnit(private.lootable_unit)
@@ -46,8 +50,8 @@ LooterFrame:SetScript(
   function(self, event, ...)
     local arg1, arg2, arg3 = ...
     if event == "PLAYER_LOGIN" then
-      if private.enabled == nil then
-        private.enabled = false
+      if cxmplex_savedvars.looter_enabled == nil then
+        cxmplex_savedvars.looter_enabled = false
       end
       if cxmplex_savedvars.loot_frame_position == nil then
         cxmplex_savedvars.loot_frame_position = {}
@@ -71,10 +75,10 @@ LooterFrame:SetScript(
       LooterFrame:SetScript(
         "OnClick",
         function(self, button, down)
-          if private.enabled == false then
-            private.enabled = true
+          if cxmplex_savedvars.looter_enabled == false then
+            cxmplex_savedvars.looter_enabled = true
           else
-            private.enabled = false
+            cxmplex_savedvars.looter_enabled = false
           end
         end
       )
@@ -104,7 +108,7 @@ LooterFrame:SetScript(
       LooterStatus:SetFontObject(GameFontNormalSmall)
       LooterStatus:SetJustifyH("CENTER")
       LooterStatus:SetPoint("CENTER", LooterFrame, "CENTER", 0, 0)
-      LooterStatus:SetText("Gathering |cffff0000Disabled")
+      LooterStatus:SetText("Looter |cffff0000Disabled")
     elseif event == "PLAYER_REGEN_ENABLED" then
       private.combat = false
     elseif event == "PLAYER_REGEN_DISABLED" then
@@ -134,7 +138,7 @@ LooterFrame:SetScript(
 LooterFrame:SetScript(
   "OnUpdate",
   function(self, elapsed)
-    if private.enabled and not private.player_looting and not private.player_casting then
+    if cxmplex_savedvars.looter_enabled and not private.player_looting and not private.player_casting then
       if private.pulse == nil then
         private.pulse = GetTime()
       end
@@ -143,11 +147,11 @@ LooterFrame:SetScript(
         private.pulse = GetTime() + private.delay
       end
     end
-    if private.enabled then
-      LooterStatus:SetText("Gathering |cFF00FF00Enabled")
+    if cxmplex_savedvars.looter_enabled then
+      LooterStatus:SetText("Looter |cFF00FF00Enabled")
     end
-    if not private.enabled then
-      LooterStatus:SetText("Gathering |cffff0000Disabled")
+    if not cxmplex_savedvars.looter_enabled then
+      LooterStatus:SetText("Looter |cffff0000Disabled")
       private.lootable_unit = nil
     end
   end
