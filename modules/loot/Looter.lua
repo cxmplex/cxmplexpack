@@ -6,10 +6,44 @@ if not cxmplex_savedvars.looter then
         move_to_loot = false
     }
 end
-
+-- local struct = {
+--     Object = "nil",
+--     Name = "nil",
+--     Guid = "nil",
+--     Id = 0,
+--     Type = {
+--         base_type = { -- cxmplex:ObjectTypeFlags() GameObject
+--             name = "nil"
+--         },
+--         sub_type = { -- cxmplex:GameObjectType() Door
+--             id = 0,
+--             name = "nil"
+--         }
+--     },
+--     Flags = { value = 0, list = {} }, -- Depends on sub_type
+--     DynamicFlags = { value = 0, list = {} }, -- Depends on sub_tpe
+--     Info = {
+--         Quest = {
+--             IsTiedToQuest = false
+--         },
+--         Unit = {
+--             Dead = false,
+--             Hidden = false,
+--             Rare = false,
+--             Lootable = false,
+--             Skinnable = false
+--         },
+--         Filter = {
+--             List = "nil"
+--         },
+--         GameObject = {
+--             Interactable = true
+--         }
+--     }
+-- }
 local function GetLootableUnit()
     local interactable_units = cxmplex:GetInteractableObjects()
-    local loot_candidates = {}
+    local obj_loot_candidates = {}
     for i = 1, #interactable_units do
         local struct = interactable_units[i]
         local object = struct.Object
@@ -21,11 +55,26 @@ local function GetLootableUnit()
         end
         local distance = cxmplex:GetDistanceBetweenObjects("player", object)
         if cxmplex:InLineOfSight("player", object) and is_good_go then
-            table.insert(loot_candidates, {object = object, distance = distance})
+            table.insert(obj_loot_candidates, {object = object, distance = distance})
         end
     end
-    table.sort(loot_candidates, function(a, b) return a.distance < b.distance end)
-    private.lootable_unit = loot_candidates[1]
+    table.sort(obj_loot_candidates, function(a, b) return a.distance < b.distance end)
+    private.lootable_unit = obj_loot_candidates[1]
+    local npc_loot_candidates = {}
+    if not private.lootable_unit or private.lootable_unit.distance > 10 then
+        for i = 1, #cxmplex.om.object_list.npcs do
+            local struct = cxmplex.om.object_list.npcs[i]
+            local object = struct.Object
+            if struct.Info.Unit.Dead and struct.Info.Unit.Lootable then
+                local distance = cxmplex:GetDistanceBetweenObjects("player", object)
+                if cxmplex:InLineOfSight("player", object) then
+                    table.insert(npc_loot_candidates, {object = object, distance = distance})
+                end
+            end
+        end
+    end
+    table.sort(npc_loot_candidates, function(a, b) return a.distance < b.distance end)
+    private.lootable_unit = npc_loot_candidates[1]
 end
 
 local function Gather()

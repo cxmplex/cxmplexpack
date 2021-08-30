@@ -1540,7 +1540,7 @@ end
 
 -- security
 function cxmplex:SpoofKeyPress()
-
+    cxmplex:CallC("IncrementAppleCount")
 end
 
 function cxmplex:ObjectIsQuestObjectType(object)
