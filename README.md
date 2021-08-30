@@ -6,7 +6,7 @@
 - Arena helpers
 - Auto Looting
 - Torghast Drwaings/Helpers
-- Zero performance impact
+- Zero performance impact, including non-cpu killing drawing, reworked libdraw.
 - Full API wrapper for discontinued unlocker
 - Fully intergrated high-performance simplified object manager and processor (Manager.lua, Tracker.lua, Funtions.lua)
 - Lots of nice commented out code that you can re-use, wdb parsing too lol
