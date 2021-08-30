@@ -10,3 +10,4 @@
 - Full API wrapper for discontinued unlocker
 - Fully intergrated high-performance simplified object manager and processor (Manager.lua, Tracker.lua, Funtions.lua)
 - Lots of nice commented out code that you can re-use, wdb parsing too lol
+- Lots of nice unit / object flag stuff
