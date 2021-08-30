@@ -1,6 +1,6 @@
 # cxmplexpack
 
-[Personal use addon]
+[Personal use World of Warcraft Lua Unlocked Addon]
 - Full questing integration / drawings
 - Glider style grinding
 - Arena helpers
