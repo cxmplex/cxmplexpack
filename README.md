@@ -2,7 +2,7 @@
 
 [Personal use World of Warcraft Lua Unlocked Addon]
 - Full questing integration / drawings done via Tooltip parsing, object flag logic, and two fn calls implemented in API
-- Glider style grinding
+- Glider style grinding, was bored one night
 - Arena helpers
 - Auto Looting
 - Torghast Drwaings/Helpers
